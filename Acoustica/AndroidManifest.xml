@@ -49,6 +49,10 @@
             android:name="ece1778.Acoustica.SaveNotationActivity"
             android:label="@string/title_activity_save_notation" >
         </activity>
+        <activity
+            android:name="ece1778.Acoustica.Recording.TestAudioCaptureWithThreshold"
+            android:label="@string/title_activity_record_audio" >
+        </activity>
     </application>
 
 </manifest>

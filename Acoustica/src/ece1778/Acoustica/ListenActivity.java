@@ -18,6 +18,7 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -136,8 +137,9 @@ public class ListenActivity extends Activity implements Runnable {
 		linearLayout.addView(visualizer);
 
 		// File IO
-		cacheDirectory = getCacheDir().toString()+"/";
-
+		//cacheDirectory = getCacheDir().toString()+"/";
+		cacheDirectory = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MozartsEar/";
+		
 		// Audio settings
 		recordingState = AudioState.RECORDING;
 		audio_source = MediaRecorder.AudioSource.MIC;		
@@ -145,7 +147,6 @@ public class ListenActivity extends Activity implements Runnable {
 		audio_channel = AudioFormat.CHANNEL_IN_MONO;
 		audio_encoding = AudioFormat.ENCODING_PCM_16BIT;
 		audio_bufferSize = AUDIO_BUFFER_SIZE; 
-
 
 		// Buffer for music input
 		timeData = new ArrayList<Double>(SPECTROGRAM_BUFFER_SIZE);
@@ -234,7 +235,7 @@ public class ListenActivity extends Activity implements Runnable {
 	}
 
 	/*****************************************************************/
-	/*                 SET NEW TEMPO Button user click method        */
+	/*         		  SET NEW TEMPO Button user click method        */
 	/*****************************************************************/
 	public void setNewTempo(View view) {
 		finish();

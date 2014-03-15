@@ -61,5 +61,7 @@
     <string name="configTitle">Note Detection Configuration</string>
     <string name="configMinFreq">Min Cutoff\n(Hz)</string>
     <string name="configMaxFreq">Max Cutoff\n(Hz)</string>
+    
+    <string name="title_activity_record_audio">Record Audio</string>
 
 </resources>

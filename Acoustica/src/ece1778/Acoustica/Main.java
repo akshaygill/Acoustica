@@ -1,12 +1,15 @@
 package ece1778.Acoustica;
 
 import ece1778.Acoustica.R;
+import ece1778.Acoustica.Recording.*;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 
 public class Main extends Activity {
 
@@ -28,7 +31,10 @@ public class Main extends Activity {
     /*****************************************************************/
     public void AcquireTempo(View view) {
     	/* Acquire Tempo activity call */
-    	Intent intent = new Intent(this, AcquireTempoActivity.class);
+    	//Intent intent = new Intent(this, AcquireTempoActivity.class);
+        //startActivity(intent);
+        
+        Intent intent = new Intent(this, TestAudioCaptureWithThreshold.class);
         startActivity(intent);
     }
     
