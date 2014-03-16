@@ -1,4 +1,5 @@
-Assignments
+Acoustica
 ===========
 
-assignments course for android
+Music composition andriod app for ameteur musicians.
+
