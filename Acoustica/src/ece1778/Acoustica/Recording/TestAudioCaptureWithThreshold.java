@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,12 +25,12 @@ import android.util.Log;
 
 public class TestAudioCaptureWithThreshold extends Activity 
 {
-
 private static final String TAG = TestAudioCaptureWithThreshold.class.getSimpleName();
 private static final int RECORDER_BPP = 16;
 private static final String AUDIO_RECORDER_FILE_EXT_WAV = ".wav";
 private static final String AUDIO_RECORDER_FOLDER = "AudioRecorder";
 private static final String AUDIO_RECORDER_TEMP_FILE = "record_temp.raw";
+private static final String AUDIO_RECORDER_TEMP_OUTPUT_FILE = "record_temp_out.raw";
 
 FileOutputStream os = null;
 
@@ -41,13 +40,14 @@ int channelConfiguration = AudioFormat.CHANNEL_IN_MONO;
 int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
 boolean started = false;
 boolean preStart=false;
- RecordAudio recordTask;
+RecordAudio recordTask;
 
 short threshold=1800; 
 Button startButton;
 Button stopButton;
+Button stitchButton;
 boolean debug=false;
-AudioRecord audioRecord ;
+AudioRecord audioRecord;
 
 int storeNum=0;
 int index=0;
@@ -55,6 +55,7 @@ int bufferLen=index;
 int foundPeak=0;
 byte[] byteBuffer;
 int i=0;
+
 @Override
 protected void onCreate(Bundle savedInstanceState) {
    Log.w(TAG, "onCreate");
@@ -62,7 +63,7 @@ protected void onCreate(Bundle savedInstanceState) {
    setContentView(R.layout.activity_test_audio_capture_with_threshold);
    startButton =(Button) findViewById(R.id.button1);
    stopButton =(Button) findViewById(R.id.button2);
-  
+   stitchButton=(Button) findViewById(R.id.button3);
    startButton.setOnClickListener(new View.OnClickListener() {
 	    public void onClick(View v) {
 	        // Do something in response to button click
@@ -78,6 +79,14 @@ protected void onCreate(Bundle savedInstanceState) {
 	    	recordTask.cancel(true);
 	    }
 	});
+   stitchButton.setOnClickListener(new View.OnClickListener() {
+	    public void onClick(View v) {
+	        // Do something in response to button click
+	    	//stopAquisition();
+	    	//recordTask.cancel(true);
+	    	BeginStitch();
+	    }
+	});
    
 }
 
@@ -86,8 +95,6 @@ protected void onCreate(Bundle savedInstanceState) {
 protected void onResume() {
    Log.w(TAG, "onResume");
    super.onResume();
-
-
 }
 
 @Override
@@ -95,36 +102,33 @@ protected void onDestroy() {
    Log.w(TAG, "onDestroy");
    stopAquisition();
    super.onDestroy();
-
 }
 
-public class RecordAudio extends AsyncTask<Void, Double, Void> {
-
+public class RecordAudio extends AsyncTask<Void, Double, Void> 
+{
    @Override
-   protected Void doInBackground(Void... arg0) {
+   protected Void doInBackground(Void... arg0) 
+   {
        Log.w(TAG, "doInBackground");
        try {
-
                String filename = getTempFilename();
-
-           try {
-                       os = new FileOutputStream(filename);
-           } catch (FileNotFoundException e) {
-                       e.printStackTrace();
+           try 
+           {
+               os = new FileOutputStream(filename);               
+           } 
+           catch (FileNotFoundException e) 
+           {
+               e.printStackTrace();
            }   
-
 
            bufferSize = AudioRecord.getMinBufferSize(frequency, 
            channelConfiguration, audioEncoding); 
-           audioRecord = new AudioRecord( MediaRecorder.AudioSource.MIC, frequency, 
+           audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, frequency, 
                    channelConfiguration, audioEncoding, bufferSize); 
 
            short[] buffer = new short[bufferSize];
            int[] bufferReadResult = new int[bufferSize];
-           audioRecord.startRecording();
-           
-           
-           
+           audioRecord.startRecording();           
 
 //          while (started) {
 //               int bufferReadResult = audioRecord.read(buffer, 0,bufferSize);
@@ -161,33 +165,39 @@ public class RecordAudio extends AsyncTask<Void, Double, Void> {
 //           }
            
           
-           while(preStart){
+           while(preStart)
+           {
         	   int bufferReadResult1 = audioRecord.read(buffer, 0,bufferSize);
-        	   if(AudioRecord.ERROR_INVALID_OPERATION != bufferReadResult1){
+        	   if(AudioRecord.ERROR_INVALID_OPERATION != bufferReadResult1)
+        	   {
 						int foundPeak = searchThreshold(buffer, threshold);
 
 						if (foundPeak == -1)
-							{started = false;
-						Log.d("started",String.valueOf(started));}
-						else {
+						{
+							started = false;
+							Log.d("started",String.valueOf(started));}
+						else 
+						{
 							started = true;
-							preStart=false;
+							preStart = false;
 						}
-					}
+				}
            }
-         //new algorithm
-           while(started){        	   
-                bufferReadResult[index]=audioRecord.read(buffer, 0,bufferSize) ;  
+           
+           //New Algorithm
+           while(started)
+           {        	   
+        	   //BufferReadResult stores the number of shorts that were read
+        	   //buffer stores the short data being read
+                bufferReadResult[index]=audioRecord.read(buffer, 0, bufferSize);  
                 Log.d("bufferReadResult",String.valueOf(buffer));
+                //Convert short data in buffer to byte and store in byteBuffer
                 byteBuffer=ShortToByte(buffer,bufferReadResult[index]);
                 index++;
-                os.write(byteBuffer);
-                
+                //Write byteBuffer to temp file
+                os.write(byteBuffer);                
            }
-           
-        	   
-           
-           
+                     
            audioRecord.stop();
            
            //new algorithm continues
@@ -209,57 +219,82 @@ public class RecordAudio extends AsyncTask<Void, Double, Void> {
 //        	  // bufferReadResult[index]=audioRecord.read(buffer, 0,bufferSize) ;  
 //        	   byte[] byteBuffer=ShortToByte(buffer,bufferReadResult[j]);
 //        	   os.write(byteBuffer);
-//           }
-           
+//           }          
 
            //close file
-             try {
+             try 
+             {
                    os.close();
-             } catch (IOException e) {
+             } 
+             catch (IOException e) 
+             {
                    e.printStackTrace();
              }
 
              copyWaveFile(getTempFilename(),getFilename());
-             deleteTempFile();
-
-
-       } catch (Throwable t) {
+             //Todo: Commented for raw
+             //deleteTempFile();
+       } 
+       
+       catch (Throwable t) 
+       {
            t.printStackTrace();
            Log.e("AudioRecord", "Recording Failed");
        }
        return null;
 
-   } //fine di doInBackground
+   } //fine do doInBackground
 
-     byte [] ShortToByte(short [] input, int elements) {
-     int short_index, byte_index;
-     int iterations = elements; //input.length;
-     byte [] buffer = new byte[iterations * 2];
-
-     short_index = byte_index = 0;
-
-     for(/*NOP*/; short_index != iterations; /*NOP*/)
+     byte [] ShortToByte(short [] input, int elements) 
      {
-       buffer[byte_index]     = (byte) (input[short_index] & 0x00FF); 
-       buffer[byte_index + 1] = (byte) ((input[short_index] & 0xFF00) >> 8);
+    	 int short_index, byte_index;
+    	 int iterations = elements; //input.length;
+    	 byte [] buffer = new byte[iterations * 2];
 
-       ++short_index; byte_index += 2;
+    	 short_index = byte_index = 0;
+
+    	 for(/*NOP*/; short_index != iterations; /*NOP*/)
+    	 {
+    		 buffer[byte_index]     = (byte) (input[short_index] & 0x00FF); 
+    		 buffer[byte_index + 1] = (byte) ((input[short_index] & 0xFF00) >> 8);
+
+    		 ++short_index; byte_index += 2;
+    	 }
+
+    	 return buffer;
+     }
+     
+     short [] ByteToShort(byte [] input, int elements) 
+     {
+    	 int short_index, byte_index;
+    	 int iterations = elements; //input.length;
+    	 short [] buffer = new short[iterations/2];
+
+    	 short_index = byte_index = 0;
+
+    	 for(/*NOP*/; short_index != iterations; /*NOP*/)
+    	 {
+    		 buffer[short_index] = (short) (input[byte_index] & 0xFF | input[byte_index+1] << 8); 
+
+    		 ++short_index; byte_index += 2;
+    	 }
+
+    	 return buffer;
      }
 
-     return buffer;
-   }
 
-
-   int searchThreshold(short[]arr,short thr){
+   int searchThreshold(short[]arr,short thr)
+   {
        int peakIndex;
        int arrLen=arr.length;
-       for (peakIndex=0;peakIndex<arrLen;peakIndex++){
-           if ((arr[peakIndex]>=thr) || (arr[peakIndex]<=-thr)){
+       for (peakIndex=0;peakIndex<arrLen;peakIndex++)
+       {
+           if ((arr[peakIndex]>=thr) || (arr[peakIndex]<=-thr))
+           {
                //se supera la soglia, esci e ritorna peakindex-mezzo kernel.
 
                return peakIndex;
-           }
-           
+           }           
        }
        return -1; //not found
    }
@@ -269,11 +304,11 @@ public class RecordAudio extends AsyncTask<Void, Double, Void> {
    protected void onProgressUpdate(Double... values) {
        DecimalFormat sf = new DecimalFormat("000.0000");           
        elapsedTimeTxt.setText(sf.format(values[0]));
-
    }
    */
 
-   private String getFilename(){
+   private String getFilename()
+   {
        String filepath = Environment.getExternalStorageDirectory().getPath();
        File file = new File(filepath,AUDIO_RECORDER_FOLDER);
 
@@ -285,7 +320,8 @@ public class RecordAudio extends AsyncTask<Void, Double, Void> {
    }
 
 
-   private String getTempFilename(){
+   private String getTempFilename()
+   {
        String filepath = Environment.getExternalStorageDirectory().getPath();
        File file = new File(filepath,AUDIO_RECORDER_FOLDER);
 
@@ -293,22 +329,42 @@ public class RecordAudio extends AsyncTask<Void, Double, Void> {
                file.mkdirs();
        }
 
-       File tempFile = new File(filepath,AUDIO_RECORDER_TEMP_FILE);
+       File tempFile = new File(filepath, AUDIO_RECORDER_TEMP_FILE);
 
-       if(tempFile.exists())
-               tempFile.delete();
+      //Todo:commented for raw
+      // if(tempFile.exists())
+      //         tempFile.delete();
 
        return (file.getAbsolutePath() + "/" + AUDIO_RECORDER_TEMP_FILE);
    }
+   
+   private String getTempOutputFilename()
+   {
+       String filepath = Environment.getExternalStorageDirectory().getPath();
+       File file = new File(filepath,AUDIO_RECORDER_FOLDER);
+
+       if(!file.exists()){
+               file.mkdirs();
+       }
+
+       File tempFile = new File(filepath, AUDIO_RECORDER_TEMP_OUTPUT_FILE);
+
+      //Todo:commented for raw
+      // if(tempFile.exists())
+      //         tempFile.delete();
+
+       return (file.getAbsolutePath() + "/" + AUDIO_RECORDER_TEMP_OUTPUT_FILE);
+   }
 
    
-   private void deleteTempFile() {
+   private void deleteTempFile() 
+   {
            File file = new File(getTempFilename());
-
            file.delete();
    }
 
-   private void copyWaveFile(String inFilename,String outFilename){
+   private void copyWaveFile(String inFilename,String outFilename)
+   {
        FileInputStream in = null;
        FileOutputStream out = null;
        long totalAudioLen = 0;
@@ -422,6 +478,169 @@ public void stopAquisition() {
        recordTask.cancel(true);
        
    }
+}
+
+public void BeginStitch()
+{
+	   File file1 = null;
+	   File file2 = null;
+	   
+	   try
+	   {
+		   file1 = new File(Environment.getExternalStorageDirectory() + "/AudioRecorder/record_temp1.raw");
+		   file2 = new File(Environment.getExternalStorageDirectory() + "/AudioRecorder/record_temp2.raw"); 
+	   }
+	   catch (Exception e)
+	   {
+		   e.printStackTrace();
+	   }
+	   
+	   Stitch(file1,file2);
+}
+
+private void Stitch(File filename1, File filename2)
+{
+	   FileInputStream is1 = null;
+	   FileInputStream is2 = null;
+	   byte[] byteBuffer1 = new byte[1000000];
+	   byte[] byteBuffer2 = new byte[1000000];
+	   short[] shortBuffer1 = null;
+	   short[] shortBuffer2 = null;
+	   short[] shortBufferOut = null;
+	   byte[] byteBufferOut = null;
+	   
+	   try 
+	   {
+	        is1 = new FileInputStream(filename1);
+	        is2 = new FileInputStream(filename2);  
+	        try 
+	        	{
+	     	   is1.read(byteBuffer1);
+				} 
+	        catch (IOException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        try 
+	        	{
+	     	   is2.read(byteBuffer2);
+	        	} 
+	        catch (IOException e)
+	        	{
+	     	   // TODO Auto-generated catch block
+	     	   e.printStackTrace();
+	        	}
+	        shortBuffer1 = new short[byteBuffer1.length/2];
+	        shortBuffer2 = new short[byteBuffer2.length/2];           
+	   } 
+	    catch (FileNotFoundException e) 
+	    {
+	        e.printStackTrace();
+	    }   	   
+	   try
+	   {
+		   shortBuffer1 = ByteToShort(byteBuffer1,byteBuffer1.length/2);
+		   shortBuffer2 = ByteToShort(byteBuffer2,byteBuffer2.length/2);		   
+	   }
+	   catch (Exception e)
+	   {
+		   e.printStackTrace();
+	   }
+	   
+	   //Check which length is more
+	   if(shortBuffer1.length > shortBuffer2.length)
+		   shortBufferOut = new short[shortBuffer1.length];
+	   else
+		   shortBufferOut = new short[shortBuffer2.length];
+	   
+	   for(int i=0;i<shortBufferOut.length;i++)
+	   {
+		   if (i < shortBuffer1.length && i < shortBuffer2.length)
+			   shortBufferOut[i] = (short) (shortBuffer1[i] + shortBuffer2[i]);
+		   
+		   //Todo: handle cases when one file bigger than the other
+	   }
+	   
+	   //Convert short data in buffer to byte and store in byteBuffer
+    byteBufferOut=ShortToByte(shortBufferOut,shortBufferOut.length);
+    
+    String filename = getTempOutputFilename();
+    try 
+    {
+        os = new FileOutputStream(filename);               
+    } 
+    catch (FileNotFoundException e) 
+    {
+        e.printStackTrace();
+    }   
+
+    try
+    {
+ 	   //Write byteBuffer to temp file
+ 	   os.write(byteBufferOut);   
+    }
+    catch (Exception e)
+    {
+ 	   e.printStackTrace();
+    }	   
+}
+
+private String getTempOutputFilename()
+{
+    String filepath = Environment.getExternalStorageDirectory().getPath();
+    File file = new File(filepath,AUDIO_RECORDER_FOLDER);
+
+    if(!file.exists()){
+            file.mkdirs();
+    }
+
+    File tempFile = new File(filepath, AUDIO_RECORDER_TEMP_OUTPUT_FILE);
+
+   //Todo:commented for raw
+   // if(tempFile.exists())
+   //         tempFile.delete();
+
+    return (file.getAbsolutePath() + "/" + AUDIO_RECORDER_TEMP_OUTPUT_FILE);
+}
+
+
+
+byte [] ShortToByte(short [] input, int elements) 
+{
+	 int short_index, byte_index;
+	 int iterations = elements; //input.length;
+	 byte [] buffer = new byte[iterations * 2];
+
+	 short_index = byte_index = 0;
+
+	 for(/*NOP*/; short_index != iterations; /*NOP*/)
+	 {
+		 buffer[byte_index]     = (byte) (input[short_index] & 0x00FF); 
+		 buffer[byte_index + 1] = (byte) ((input[short_index] & 0xFF00) >> 8);
+
+		 ++short_index; byte_index += 2;
+	 }
+
+	 return buffer;
+}
+
+short [] ByteToShort(byte [] input, int elements) 
+{
+	 int short_index, byte_index;
+	 int iterations = elements; //input.length;
+	 short [] buffer = new short[iterations];
+
+	 short_index = byte_index = 0;
+
+	 for(/*NOP*/; short_index != iterations-1; /*NOP*/)
+	 {
+		 buffer[short_index] = (short) (input[byte_index] & 0xFF | input[byte_index + 1] << 8); 
+
+		 ++short_index; byte_index += 2;
+	 }
+
+	 return buffer;
 }
 
 public void startAquisition(){

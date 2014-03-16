@@ -75,9 +75,7 @@ public class LibraryActivity extends Activity {
 		            }
 		        });
 	    }
-	    
-	    
-	    
+	        
 	}
 	
 	/*****************************************************************/

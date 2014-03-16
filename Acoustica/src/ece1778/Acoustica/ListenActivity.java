@@ -352,18 +352,25 @@ public class ListenActivity extends Activity implements Runnable {
 						index += 2;
 					}
 					// Append the input data byte array to the music data file
-					try {
+					try 
+					{
 						// Limit size to under 7mb
 						// This converts to a bit over 5 minutes of recording time
-						if (bos != null && 2*MUSIC_BUFFER_SIZE*numLoops < 7000000) {
+						if (bos != null && 2*MUSIC_BUFFER_SIZE*numLoops < 7000000) 
+						{
 							bos.write(tempBuffer, 0, MUSIC_BUFFER_SIZE*2);							
-						} else {
-							if (numLoops%400 == 0) {
+						} 
+						else 
+						{
+							if (numLoops%400 == 0) 
+							{
 								// Periodically displays message once 7mb limit is hit
 								runOnUiThread(recordLengthExceeded);
 							}
 						}
-					} catch (IOException e) {
+					} 
+					catch (IOException e) 
+					{
 						Log.e(TAG, "Error writing to "+MUSIC_DATA_FILE, e);
 					}
 
@@ -374,7 +381,8 @@ public class ListenActivity extends Activity implements Runnable {
 					// We toss out the second half of the frequency data because we only
 					// want the first half up to 4khz (sampling rate = 8khz) for music
 					int j = 0;
-					for (int i=0; i<MUSIC_BUFFER_SIZE; i+=2) {				
+					for (int i=0; i<MUSIC_BUFFER_SIZE; i+=2) 
+					{				
 						// TODO: will want to double buffer visualizerData if graphics is to be smooth
 						visualizerData[j] = 10*Math.log10(visualizerFreqData[i]*visualizerFreqData[i]+
 								visualizerFreqData[i+1]*visualizerFreqData[i+1]);
@@ -382,7 +390,8 @@ public class ListenActivity extends Activity implements Runnable {
 					}
 
 					// Arbitrarily large number to limit the counter
-					if (numLoops <= 99999999) {
+					if (numLoops <= 99999999) 
+					{
 						numLoops++;
 					}
 				}
