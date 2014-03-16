@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Mozart\'s Ear</string>
-    <string name="welcome_msg">Welcome to Mozart\'s Ear!</string>
+    <string name="app_name">Acoustica</string>
+    <string name="welcome_msg">Welcome to Acoustica</string>
     <string name="start_msg">START</string>
     <string name="exit_msg">EXIT</string>
     <string name="menu_home">HOME</string>
@@ -63,5 +63,6 @@
     <string name="configMaxFreq">Max Cutoff\n(Hz)</string>
     
     <string name="title_activity_record_audio">Record Audio</string>
+     <string name="plug_instrument">Please plug in your instrument for best performance</string>
 
 </resources>
