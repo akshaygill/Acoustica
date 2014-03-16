@@ -19,6 +19,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class AnalysisActivity extends Activity {
 
@@ -32,6 +33,7 @@ public class AnalysisActivity extends Activity {
 	private ProgressBar progressBar;
 	private TextView TextViewAnalysis;
 	private String CallActivity;
+
 
 	/* Algorithm variables */
 	private int TempoValue_bpm;
@@ -57,6 +59,8 @@ public class AnalysisActivity extends Activity {
 	AtomicBoolean boTotalAnalysisDone     = new AtomicBoolean(false);
 	AtomicBoolean boUnknownKEY            = new AtomicBoolean(false);
 
+	//music score object
+	MusicScore ms;
 	/*****************************************************************/
 	/*                 onCreate                                      */
 	/*****************************************************************/
@@ -184,7 +188,7 @@ public class AnalysisActivity extends Activity {
 	/*                 DONE Button user click method                 */
 	/*****************************************************************/
 	public void doneAnalysis(View view) {
-		finish();
+		Toast.makeText(getBaseContext(),ms.getPstring(), Toast.LENGTH_SHORT).show();
 	}
 
 	/*****************************************************************/
