@@ -2,6 +2,7 @@ package ece1778.Acoustica;
 
 import ece1778.Acoustica.R;
 import ece1778.Acoustica.Recording.*;
+import ece1778.Acoustica.Stitching.*;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -35,7 +36,8 @@ public class Main extends Activity {
         //startActivity(intent);
         
         Intent intent = new Intent(this, TestAudioCaptureWithThreshold.class);
-        startActivity(intent);
+        startActivity(intent);          
+         
     }
     
     /*****************************************************************/

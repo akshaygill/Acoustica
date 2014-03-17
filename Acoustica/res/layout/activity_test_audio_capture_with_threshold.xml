@@ -19,7 +19,8 @@
          android:id="@+id/button3"
          android:layout_width="114dp"
          android:layout_height="wrap_content"
-         android:text="BeginStitch" 
+         android:text="BeginStitch"
+         android:onClick="Stitch" 
          />
 
 </LinearLayout>
