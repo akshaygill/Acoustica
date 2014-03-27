@@ -39,20 +39,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-            <Button
-                android:id="@+id/saveAnalysisButton"
-                android:onClick="saveAnalysis"
-                android:text="@string/save_analysis_msg" />
+           
 
-            <Button
-                android:id="@+id/analyzePatternButton"
-                android:onClick="patternAnalysis"
-                android:text="@string/pattern_analysis_msg_show" />
+          
 
             <Button
                 android:id="@+id/doneAnalysisButton"
                 android:onClick="doneAnalysis"
-                android:text="@string/done_analysis_msg" />
+                android:text="CREATE" />
+            
+             <Button
+                android:id="@+id/saveAnalysisButton"
+                android:onClick="PlayFunc"
+                android:enabled="false"
+                android:text="PLAY" />
         </TableRow>
     </TableLayout>
 
