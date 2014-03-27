@@ -89,7 +89,7 @@ protected void onCreate(Bundle savedInstanceState) {
 	        
 	    	// Do something in response to button click	    	    	
 	    	Stitching stitch = new Stitching();	    	
-	    	stitch.BeginStitch();
+	    	//stitch.BeginStitch();
 			CharSequence text = "Stitching complete";
 			int duration = Toast.LENGTH_SHORT;
 
@@ -290,7 +290,7 @@ public class RecordAudio extends AsyncTask<Void, Double, Void>
     	 return buffer;
      }
 
-
+//not needed
    int searchThreshold(short[]arr,short thr)
    {
        int peakIndex;

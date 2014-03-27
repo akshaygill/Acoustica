@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
+import android.widget.EditText;
 
 public class Main extends Activity {
 
@@ -33,11 +33,28 @@ public class Main extends Activity {
     public void AcquireTempo(View view) {
     	/* Acquire Tempo activity call */
     	//Intent intent = new Intent(this, AcquireTempoActivity.class);
-        //startActivity(intent);
+        //startActivity(intent);    	
+    	
+    	/***** uncomment for integration with Mozart ear app*/
+    	Intent listenIntent = new Intent(this, ListenActivity.class);
+		
+		Bundle bundle = new Bundle();
+				
+		bundle.putInt("tempo_value", 120);
+							
+		bundle.putInt("min_freq", 20);
+		bundle.putInt("max_freq", 20000);
+		
+		listenIntent.putExtras(bundle);
+		startActivity(listenIntent);
+//        
+//        Intent intent = new Intent(this, TestAudioCaptureWithThreshold.class);
+//        startActivity(intent);
         
-        Intent intent = new Intent(this, TestAudioCaptureWithThreshold.class);
-        startActivity(intent);          
-         
+//        Intent intent = new Intent(this, TestAudioCaptureWithThreshold.class);
+//        startActivity(intent);          
+//         
+
     }
     
     /*****************************************************************/
@@ -50,34 +67,34 @@ public class Main extends Activity {
     /*****************************************************************/
     /*                 MENU ITEM Buttons                             */
     /*****************************************************************/
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-    		case R.id.menu_home:
-    			//finish();
-    			//Intent homeIntent = new Intent(this, Main.class);
-    			//startActivity(homeIntent);
-    			return true;
-
-        	case R.id.menu_transcribe:
-        		Intent transcribeIntent = new Intent(this, AcquireTempoActivity.class);
-                startActivity(transcribeIntent);
-        		return true;
-
-        	case R.id.menu_library:
-        		//finish();
-        		Intent libraryIntent = new Intent(this, LibraryActivity.class);
-                startActivity(libraryIntent);
-        		return true;
-
-        	case R.id.menu_info:
-        		Intent infoIntent = new Intent(this, InfoActivity.class);
-                startActivity(infoIntent);
-        		return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-    
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//    		case R.id.menu_home:
+//    			//finish();
+//    			//Intent homeIntent = new Intent(this, Main.class);
+//    			//startActivity(homeIntent);
+//    			return true;
+//
+//        	case R.id.menu_transcribe:
+//        		Intent transcribeIntent = new Intent(this, AcquireTempoActivity.class);
+//                startActivity(transcribeIntent);
+//        		return true;
+//
+//        	case R.id.menu_library:
+//        		//finish();
+//        		Intent libraryIntent = new Intent(this, LibraryActivity.class);
+//                startActivity(libraryIntent);
+//        		return true;
+//
+//        	case R.id.menu_info:
+//        		Intent infoIntent = new Intent(this, InfoActivity.class);
+//                startActivity(infoIntent);
+//        		return true;
+//
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
+//    
 }

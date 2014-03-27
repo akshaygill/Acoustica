@@ -28,6 +28,7 @@ public class Stitching
 	private static final String AUDIO_RECORDER_FILE_EXT_WAV = ".wav";
 	private static final String AUDIO_RECORDER_FOLDER = "AudioRecorder";
 	private static final String AUDIO_RECORDER_TEMP_OUTPUT_FILE = "record_temp_out.raw";
+	private static final String AUDIO_RECORDER_WAV_OUTPUT_FILE = "final_out.wav";
 
 	FileOutputStream os = null;
 
@@ -48,9 +49,9 @@ public class Stitching
 	int i=0;
 	GenerateWave waveGen;
 	   
-	public Boolean BeginStitch()
+	public Boolean BeginStitch(File file1, File file2)
 	{			
-		   File file1 = null;
+		  /* File file1 = null;
 		   File file2 = null;
 		   
 		   try
@@ -62,7 +63,7 @@ public class Stitching
 		   {
 			   e.printStackTrace();
 		   }
-		   
+		   */
 		   Stitch(file1,file2);
 		   
 		   return true;
@@ -247,8 +248,6 @@ public class Stitching
 		 return buffer;
 	}
 
-
-
 	private String getFilename()
 	{
 	    String filepath = Environment.getExternalStorageDirectory().getPath();
@@ -258,7 +257,7 @@ public class Stitching
 	            file.mkdirs();
 	    }
 
-	    return (file.getAbsolutePath() + "/" + System.currentTimeMillis() + AUDIO_RECORDER_FILE_EXT_WAV);
+	    return (file.getAbsolutePath() + "/" + AUDIO_RECORDER_WAV_OUTPUT_FILE);
 	}	
 	
 	public class GenerateWave extends AsyncTask<Void, Double, Void> 
@@ -325,8 +324,7 @@ public class Stitching
 					header[43] = (byte) ((totalAudioLen >> 24) & 0xff);
 					
 					out.write(header, 0, 44);
-					
-				
+								
 			}
 
 			private void copyWaveFile(String inFilename,String outFilename)

@@ -2,8 +2,6 @@ package ece1778.Acoustica;
 
 import java.util.ArrayList;
 
-import ece1778.Acoustica.R;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,7 +35,14 @@ public class MusicScore extends View {
 	};
 
 	private static final String TAG = "MusicScore";
-
+	
+	/// added by Amanjot
+	//begin
+	private int[] pattern = new int[4];
+	private int count_notes = 0;
+	int pattern_idx = 0;
+	private String pstring = new String();
+	//end
 	// Notes and rests
 	private static final int DOUBLE_WHOLE = 0;
 	private static final int WHOLE = 1;
@@ -261,6 +266,7 @@ public class MusicScore extends View {
 
 	private void drawMusicScore() {
 		// Notes based on beat
+		
 		final double FULL_BAR = 4;	// 4 beats in a bar
 		final double BEATS_DOUBLE_WHOLE = 8d;
 		final double BEATS_WHOLE = 4d;
@@ -285,7 +291,9 @@ public class MusicScore extends View {
 		} else if (notePitch.size() != noteDuration.size()) {	
 			Log.e(TAG, "ArrayList size mismatch: noteId size != noteDuration size");
 		} else {
-			double barGauge = 0;	// Number of beats we've filled a bar with; When this reaches exactly 4, we draw a bar
+			double barGauge = 0;
+				
+			// Number of beats we've filled a bar with; When this reaches exactly 4, we draw a bar
 
 			// Reposition starting points
 			nextNoteX = 0;
@@ -301,60 +309,120 @@ public class MusicScore extends View {
 
 			// Draw the notes
 			int size=notePitch.size();
+			//Modified by Amanjot 
+			//begin
 			for (int i=0; i<size; i++) {
+				
 				if (barGauge >= FULL_BAR) {
 					barGauge = 0d;
+					pattern_idx+=1;
+					count_notes = 0;
 					drawSymbol(BAR);
-				}			
+				}		
+				else
+				{
+					if (pattern_idx<4)
+					{
+					pattern[pattern_idx]= count_notes;
+					Log.d("Pattern Index",String.valueOf(pattern_idx));
+					Log.d("Notes Count",String.valueOf(count_notes));
+					Log.d("Pattern values",String.valueOf(pattern[pattern_idx]));
+						
+					}
+					else
+					{
+						if(((pattern[0])| (pattern[1])| (pattern[2])| (pattern[3]))==0)
+						{
+							pattern_idx = 0;
+						}
+					}
+					
+				}
 
 				int note = notePitch.get(i).intValue();
 				double duration = noteDuration.get(i).doubleValue();				
 
-				if (duration == BEATS_DOUBLE_WHOLE) {					
+				if (duration == BEATS_DOUBLE_WHOLE) {	
+					count_notes+=1; 
 					barGauge += BEATS_DOUBLE_WHOLE;
 					drawNote(DOUBLE_WHOLE, note);
 					// TODO setting this repeatedly is very inefficient
 					notePositionX[i] = nextNoteX-DEFAULT_DISTANCE+100;
-				} else if (duration == BEATS_WHOLE) {					
+				} else if (duration == BEATS_WHOLE) {
+					count_notes+=1;
 					barGauge += BEATS_WHOLE;
 					drawNote(WHOLE, note);
 					notePositionX[i] = nextNoteX-DEFAULT_DISTANCE+100;
 				} else if (duration == BEATS_DOTTED_HALF) {
+					count_notes+=1;
 					barGauge += BEATS_DOTTED_HALF;
 					drawNote(HALF, note, DOTTED);
 					notePositionX[i] = nextNoteX-DEFAULT_DISTANCE+100;
 				} else if (duration == BEATS_HALF) {
+					count_notes+=1;
 					barGauge += BEATS_HALF;
 					drawNote(HALF, note);
 					notePositionX[i] = nextNoteX-DEFAULT_DISTANCE+100;
 				} else if (duration == BEATS_DOTTED_QUARTER) {
+					count_notes+=1;
 					barGauge += BEATS_HALF;
 					drawNote(QUARTER, note, DOTTED);	
 					notePositionX[i] = nextNoteX-DEFAULT_DISTANCE+100;
 				} else if (duration == BEATS_QUARTER) {
+					count_notes+=1;
 					barGauge += BEATS_QUARTER;
 					drawNote(QUARTER, note);
 					notePositionX[i] = nextNoteX-DEFAULT_DISTANCE+100;
 				} else if (duration == BEATS_DOTTED_EIGHTH) {
+					count_notes+=1;
 					barGauge += BEATS_EIGHTH;
 					drawNote(EIGHTH, note, DOTTED);
 					notePositionX[i] = nextNoteX-DEFAULT_DISTANCE+100;
 				} else if (duration == BEATS_EIGHTH) {
+					count_notes+=1;
 					barGauge += BEATS_EIGHTH;
 					drawNote(EIGHTH, note);
 					notePositionX[i] = nextNoteX-DEFAULT_DISTANCE+100;
 				} else if (duration == BEATS_SIXTEENTH) {
+					count_notes+=1;
 					barGauge += BEATS_SIXTEENTH;
 					drawNote(SIXTEENTH, note);
 					notePositionX[i] = nextNoteX-DEFAULT_DISTANCE+100;
 				} else {
 					Log.w(TAG, "Unsupported note detected. note="+note+" duration="+duration);
-				}	
+				}
+				
+				
+				//Pattern.setText(pstring);
 			}
 			drawSymbol(END_BAR);
 		}
+		
+
 	}
 
+	
+	public String getPstring()
+	{
+		pstring = new String();
+		for(int i1 = 0; i1<4;i1++)
+		{
+			if(pattern[i1]==0)
+			{
+				pattern[i1] = 1;
+			}
+			if(pattern[i1]>4)
+			{
+				pattern[i1]=4;
+			}
+			pstring+= String.valueOf(pattern[i1])+" ";
+		}
+		Log.v("Pattern String", pstring);
+		return pstring;
+	}
+	
+	
+	//End Modified by Amanjot
 	// Auto adjust the scroll width to the end of the music score
 	public void updateScrollWidth() {
 		LayoutParams lp = getLayoutParams();	
@@ -853,6 +921,13 @@ public class MusicScore extends View {
 			drawSymbol(STAFF);
 		}	
 	}
+
+	
+	public int[] getPattern() {
+		return pattern;
+	}
+
+	
 
 	private void drawSymbol(int type) {
 		switch (type) {
