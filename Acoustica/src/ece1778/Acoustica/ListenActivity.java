@@ -803,7 +803,7 @@ public class ListenActivity extends Activity implements Runnable {
 		short data = 0;
 		int error = 0;
 		byte[] buf = new byte[2];
-		float[] float_buf = new float[2];
+		float[] float_buf = new float[8192];
 		int done = 0;  
 		int timesRepeated = 0;
 		int windowDistance = 0;
@@ -823,17 +823,14 @@ public class ListenActivity extends Activity implements Runnable {
 				try
 				{
 					if (bis != null) 
-					{
+					{ 
 						error = bis.read(buf, 0, 2);
-						float_buf[0] = (float)buf[0];
-						float_buf[1] = (float)buf[1];
-						
+						float_buf[l] = (float)buf[0];
+						Log.d(TAG, "floatvalue0 "+ String.valueOf(float_buf[l]) );
+						float_buf[l+1] = (float)buf[1];
+						Log.d(TAG, "floatvalue1 "+ String.valueOf(float_buf[l+1]) );
 						//Added by Akshay - Beat Detect
-						BeatDetect bdetect = new BeatDetect();			
-						bdetect.detect(float_buf);
 						
-						if(bdetect.isOnset())
-							Log.e(TAG, "Onset detected");
 					}
 				} 
 				catch (Exception e) 
@@ -863,7 +860,14 @@ public class ListenActivity extends Activity implements Runnable {
 					timeData.add(Double.valueOf((double)data));
 				}
 			}
-
+   //added by akshay
+			//begin
+			BeatDetect bdetect = new BeatDetect();			
+			bdetect.detect(float_buf);
+			
+			if(bdetect.isOnset())
+				Log.e(TAG, "Onset detected");
+			//end
 		
 			int j = 0;
 			int k = 0;			

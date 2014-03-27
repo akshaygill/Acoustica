@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ece1778.Acoustica"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="ece1778.Acoustica.Main"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="ece1778.Acoustica.AcquireTempoActivity"
+            android:label="@string/title_activity_acquire_tempo" >
+        </activity>
+        <activity
+            android:name="ece1778.Acoustica.ListenActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="ece1778.Acoustica.InfoActivity"
+            android:label="@string/title_activity_info" >
+        </activity>
+        <activity
+            android:name="ece1778.Acoustica.LibraryActivity"
+            android:label="@string/title_activity_library" >
+        </activity>
+        <activity
+            android:name="ece1778.Acoustica.AnalysisActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="ece1778.Acoustica.SaveNotationActivity"
+            android:label="@string/title_activity_save_notation" >
+        </activity>
+        <activity
+            android:name="ece1778.Acoustica.Recording.TestAudioCaptureWithThreshold"
+            android:label="@string/title_activity_record_audio" >
+        </activity>
+    </application>
+
+</manifest>
