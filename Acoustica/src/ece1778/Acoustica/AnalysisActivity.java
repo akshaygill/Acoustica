@@ -215,7 +215,7 @@ public class AnalysisActivity extends Activity {
 	}
 
 	/*****************************************************************/
-	/*                 DONE Button user click method                 */
+	/*                   DONE Button user click method                 */
 	/*****************************************************************/
 	
 	public void doneAnalysis(View view) {
@@ -227,12 +227,10 @@ public class AnalysisActivity extends Activity {
     
         stitch.BeginStitch(file1, file2);
         Button b = (Button)findViewById(R.id.saveAnalysisButton);
-		if (NoteListInteger != null && NoteDuration != null &&
-				NoteListInteger.size() != 0 && NoteDuration.size() != 0) {
-			b.setEnabled(true);
-		} else {
+		
+		
 			b.setEnabled(false);
-		}
+	
  }
 	
 	public void PlayFunc(View v){
