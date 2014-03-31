@@ -4,7 +4,13 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     tools:context=".MainActivity" >
-
+<Button
+        android:id="@+id/FileNamebutton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Filenames"
+        android:onClick="getFileNames" />
     <TextView
         android:id="@+id/welcomeTextView"
         android:layout_width="fill_parent"

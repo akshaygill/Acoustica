@@ -53,6 +53,10 @@
             android:name="ece1778.Acoustica.Recording.TestAudioCaptureWithThreshold"
             android:label="@string/title_activity_record_audio" >
         </activity>
+        <activity 
+            android:name="ece1778.Acoustica.Filebrowser.FileBrowse"
+            android:label="@string/app_name">
+        </activity>
     </application>
 
 </manifest>

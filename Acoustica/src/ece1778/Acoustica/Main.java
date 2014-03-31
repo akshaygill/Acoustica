@@ -1,6 +1,6 @@
 package ece1778.Acoustica;
 
-import ece1778.Acoustica.R;
+import ece1778.Acoustica.Filebrowser.FileBrowse;
 import ece1778.Acoustica.Recording.*;
 import ece1778.Acoustica.Stitching.*;
 
@@ -25,6 +25,11 @@ public class Main extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	//added by nitin
+	public void getFileNames(View view){
+		Intent filenameIntent = new Intent(this,FileBrowse.class);
+		startActivity(filenameIntent);
 	}
 
 	/*****************************************************************/
