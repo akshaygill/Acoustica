@@ -29,10 +29,12 @@ public class FileBrowse  extends Activity{
 	private String directory;
 	private ArrayList<String> FilesInFolder;
 	private SimpleAdapter simpleAdapt;
+	PlayMedia pm;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_listview);
+		pm = new PlayMedia(new MediaPlayer());
 		listViewfile=(ListView)findViewById(R.id.listView);
 		directory = Environment.getExternalStorageDirectory().getAbsolutePath()+"/AudioRecorder/";
 		List<Map<String, String>> musicFilesMap = new ArrayList<Map<String,String>>(); 
@@ -69,9 +71,10 @@ public class FileBrowse  extends Activity{
 			public void onItemClick(AdapterView<?> parentAdapter, View view, int position, long id){
 			TextView text1=(TextView) view;
 			//play the file using mediaplayer
-			PlayMedia pm = new PlayMedia(new MediaPlayer());
+			
 			pm.startPlaying(text1.getText().toString());
-			Toast.makeText(getApplicationContext(), "Item with id ["+id+"] - Position ["+position+"] - Music ["+text1.getText()+"]", Toast.LENGTH_SHORT).show(); 
+			//test to check the file name
+			//Toast.makeText(getApplicationContext(), "Item with id ["+id+"] - Position ["+position+"] - Music ["+text1.getText()+"]", Toast.LENGTH_SHORT).show(); 
 			}
 		}
 

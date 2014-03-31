@@ -20,6 +20,18 @@ public class PlayMedia {
 	public void startPlaying(String filename){
 		String filePath = Environment.getExternalStorageDirectory()+"/AudioRecorder/"+ filename;
 		//MediaPlayer mediaPlayer = new  MediaPlayer();
+		try{
+			if(mp.isPlaying())
+				mp.stop();
+			
+			mp.reset();
+
+			
+		}
+		catch(IllegalStateException e){
+			// TODO Auto-generated catch block
+						e.printStackTrace();
+		}
 		try {
 			mp.setDataSource(filePath);
 		} catch (IllegalArgumentException e) {
@@ -50,7 +62,11 @@ public class PlayMedia {
 	
 	public void stopPlaying(){
 		mp.stop();
-		
+		try{
+		mp.reset();
+		} catch(IllegalStateException e){
+			e.printStackTrace();
+		}
 	}
 	}
 
