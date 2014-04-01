@@ -215,22 +215,25 @@ public class AnalysisActivity extends Activity {
 	}
 
 	/*****************************************************************/
-	/*                   DONE Button user click method                 */
+	/*                 DONE Button user click method                 */
 	/*****************************************************************/
 	
 	public void doneAnalysis(View view) {
-        Stitching stitch = new Stitching();
-       
+    Stitching stitch = new Stitching();
+//    String drum_file = "f"+maptoFile(ms.getPstring());
+//    int resId = getResources().getIdentifier(drum_file, "raw", getPackageName());
+//    
+//    //Uri path = Uri.parse("android.resource://"+ getPackageName()+ "/raw/"+drum_file);   
     String drum_file = "f"+maptoFile(ms.getPstring())+".raw";
+    
+   // File file1 = new File(path.getPath());
     File file1 = new File(Environment.getExternalStorageDirectory() + "/AudioRecorder/drum_loops/"+drum_file);
     File file2 = new File(Environment.getExternalStorageDirectory() + "/AudioRecorder/record_temp.raw");
     
         stitch.BeginStitch(file1, file2);
         Button b = (Button)findViewById(R.id.saveAnalysisButton);
+		b.setEnabled(true);
 		
-		
-			b.setEnabled(false);
-	
  }
 	
 	public void PlayFunc(View v){
@@ -270,6 +273,7 @@ public class AnalysisActivity extends Activity {
 	/*****************************************************************/
 	@Override
 	public void onBackPressed() {
+		pm.stopPlaying();
 		finish();
 	}
 
@@ -524,23 +528,17 @@ public class AnalysisActivity extends Activity {
 			}
 			
 	        // Use that if you just need the file name
+			
 	        String filename = fields[count].getName();
+	        if (filename.equals("clicktrack"))
+	        {}
+	        else{
 	        filename = filename.replaceAll("f", "");
 	        filename = filename.replaceAll("raw","");
 	        filenames[count]=Integer.parseInt(filename);
 	        Log.d("FileName_raw",filename);
-
-	        // Use this to load the file
-	        try {
-	            Resources res = getResources();
-	            InputStream in = res.openRawResource(rid);
-
-	            byte[] b = new byte[in.available()];
-	            in.read(b);
-	            // do whatever you need with the in stream
-	        } catch (Exception e) {
-	            // log error
 	        }
+	      
 	    }
 	    return filenames;
 	}
@@ -550,6 +548,7 @@ public class AnalysisActivity extends Activity {
 		int pattern_num = Integer.parseInt(pattern);
 		//Integer pattern_num = new Integer(pattern_num0);
 		int [] filenames = getFileList();
+//		int [] filenames = getRawFiles();
 		Arrays.sort(filenames);
 		
 		if(Arrays.binarySearch(filenames,pattern_num)>0)
