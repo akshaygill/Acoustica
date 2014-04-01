@@ -18,6 +18,8 @@
 
 package ece1778.Acoustica.BeatDetect;
 
+import android.util.Log;
+
 //import ece1778.Acoustica.minim.AudioBuffer;
 ///import ece1778.Acoustica.minim.Minim;
 
@@ -123,7 +125,7 @@ public class BeatDetect
 		initSEResources();
 		initGraphs();
 		algorithm = SOUND_ENERGY;
-		sensitivity = 10;
+		sensitivity = 350;
 	}
 
 	/**
@@ -548,18 +550,19 @@ public class BeatDetect
 		float V = variance(eBuffer, E);
 		// compute C using a linear digression of C with V
 		float C = (-0.0025714f * V) + 1.5142857f;
-		// filter negaive values
+		// filter negative values
 		float diff = (float)Math.max(instant - C * E, 0);
 		pushVal(diff);
 		// find the average of only the positive values in dBuffer
 		float dAvg = specAverage(dBuffer);
 		// filter negative values
-		float diff2 = (float)Math.max(diff - dAvg, 0);
+		float diff2 = (float)Math.max((diff - dAvg), 0);
 		pushVar(diff2);
 		// report false if it's been less than 'sensitivity'
 		// milliseconds since the last true value
 		if (System.currentTimeMillis() - timer < sensitivity)
 		{
+			Log.d("REJECTED", "ONSET FALSE");
 			isOnset = false;
 		}
 		// if we've made it this far then we're allowed to set a new

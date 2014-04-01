@@ -92,6 +92,10 @@ public class AnalysisActivity extends Activity {
 	MediaPlayer mp = new MediaPlayer();
 	PlayMedia pm = new PlayMedia(mp);
 	//End
+	
+	//Added by Akshay
+	String pattern_onSet = "1111";
+	//end
 	/*****************************************************************/
 	/*                 onCreate                                      */
 	/*****************************************************************/
@@ -107,6 +111,8 @@ public class AnalysisActivity extends Activity {
 			TempoValue_ms = extras.getInt("tempo_ms");
 			FrequencyList = (ArrayList<Double>) getIntent().getSerializableExtra("noteFrequency");
 			DurationList  = (ArrayList<Double>) getIntent().getSerializableExtra("noteDuration");
+			pattern_onSet = (String) getIntent().getSerializableExtra("pattern_onSet");
+			
 		}
 		if (CallActivity.equals(LIBRARY_ACTIVITY)) {
 			KeyValue = extras.getString("key_string");
@@ -229,8 +235,9 @@ public class AnalysisActivity extends Activity {
 //    String drum_file = "f"+maptoFile(ms.getPstring());
 //    int resId = getResources().getIdentifier(drum_file, "raw", getPackageName());
 //    
-//    //Uri path = Uri.parse("android.resource://"+ getPackageName()+ "/raw/"+drum_file);   
-    String drum_file = "f"+maptoFile(ms.getPstring())+".raw";
+//    //Uri path = Uri.parse("android.resource://"+ getPackageName()+ "/raw/"+drum_file);  
+    Log.d("Analysis Activity", "The pattern found is : " + pattern_onSet);
+    String drum_file = "f"+maptoFile(pattern_onSet)+".raw";
     
    // File file1 = new File(path.getPath());
     File file1 = new File(Environment.getExternalStorageDirectory() + "/AudioRecorder/drum_loops/"+drum_file);

@@ -56,6 +56,7 @@ public class ListenActivity extends Activity implements Runnable {
 	// Audio input settings
 	private static final int MUSIC_BUFFER_SIZE = 256;	// Short; for sampling data
 	private static final int AUDIO_BUFFER_SIZE = 8192*2*2;	// Bytes; for microphone buffer
+	private static final int ONSET_BUFFER_SIZE = 2048;
 	private int audio_source;		// Audio input source
 	private int audio_samplingFreq; // Hertz
 	private int audio_channel;
@@ -64,12 +65,12 @@ public class ListenActivity extends Activity implements Runnable {
 	private ArrayList<Double> timeData;
 
 	// FFT (for visualizer)
-	private static final int VISUALIZER_FFT_SIZE = 2*MUSIC_BUFFER_SIZE;	// JTransform FFT has RE and IM parts, but we only use the RE	
+	private static final int VISUALIZER_FFT_SIZE = 2*ONSET_BUFFER_SIZE;	// JTransform FFT has RE and IM parts, but we only use the RE	
 	private DoubleFFT_1D visualizerFFT;
 	private double[] visualizerFreqData;
 
 	// Visualizer
-	private static final int VISUALIZER_BARS = 128;
+	private static final int VISUALIZER_BARS = 1028;
 	private Visualizer visualizer;
 	private double[] visualizerData;	
 
@@ -120,6 +121,12 @@ public class ListenActivity extends Activity implements Runnable {
 	FileOutputStream os = null;
 	MediaPlayer mp = new MediaPlayer();
 	PlayMedia pm = new PlayMedia(mp);
+	//end
+	
+	//Added by Akshay
+	BeatDetect bdetect;
+	int beat_counter = 0;
+	String pattern_onSet = "1111";
 	//end
 
 	/*****************************************************************/
@@ -184,14 +191,18 @@ public class ListenActivity extends Activity implements Runnable {
 		magnitudeFFT = new double[SPECTROGRAM_BUFFER_SIZE];
 
 		// Precompute hanning window values
-		visualizerHann = new double[MUSIC_BUFFER_SIZE];
+		visualizerHann = new double[ONSET_BUFFER_SIZE];
 		for (int i=0; i<visualizerHann.length; i++) {
-			visualizerHann[i] = hanningWindow((double)i, MUSIC_BUFFER_SIZE);
+			visualizerHann[i] = hanningWindow((double)i, ONSET_BUFFER_SIZE);
 		}
 		analysisHann = new double[SPECTROGRAM_BUFFER_SIZE];
 		for (int i=0; i<analysisHann.length; i++) {
 			analysisHann[i] = hanningWindow((double)i, SPECTROGRAM_BUFFER_SIZE);
 		}
+		
+		//Added by Akshay - Beat Detect
+				bdetect = new BeatDetect();
+				//end
 	}
 
 	/*****************************************************************/
@@ -286,6 +297,10 @@ public class ListenActivity extends Activity implements Runnable {
 		AnalysisIntent.putExtra("tempo_ms", metroFrequency_ms);
 		AnalysisIntent.putExtra("noteFrequency", noteFrequency);
 		AnalysisIntent.putExtra("noteDuration", noteDuration);
+		//Added by Akshay
+		AnalysisIntent.putExtra("pattern_onSet", pattern_onSet);
+		Log.d("Listen", "The pattern found is : " + pattern_onSet);
+		//end
 		startActivity(AnalysisIntent);
 
 		root.removeCallbacks(this);
@@ -347,10 +362,13 @@ public class ListenActivity extends Activity implements Runnable {
 		
 
 		audioRecordThread = new Thread(new Runnable() {
-			byte[] tempBuffer = new byte[MUSIC_BUFFER_SIZE*2];	
+			byte[] tempBuffer = new byte[ONSET_BUFFER_SIZE*2];	
 			short[] buf = new short[MUSIC_BUFFER_SIZE];
-			
-			
+
+			//Added by Akshay
+			short[] onset_buf = new short[ONSET_BUFFER_SIZE];
+			float[] onset_buf_float = new float[ONSET_BUFFER_SIZE];
+			//end
 
 			@Override
 			public void run() {
@@ -393,31 +411,82 @@ public class ListenActivity extends Activity implements Runnable {
 						}
 		         }
 				 //end 
+				 
+				 //Added by akshay
+				  long currentTime = System.currentTimeMillis();
+					int counter = 0;
+					int reset_counter = 0;
+					int[] pattern = new int[4];
+					pattern[0] = 1;
+					pattern[1] = 1;
+					pattern[2] = 1;
+					pattern[3] = 1;
+				 //end
 				while ((recordingState == AudioState.RECORDING) && started) {
 					// Read from buffer	
 					
-					Log.d(TAG,"reading from buffer");
-					int err = 0;
+					//Log.d(TAG,"reading from buffer");
+					//int err = 0;
 					//Receive audio from mic and put it in main buffer
-					err = ar.read(buf, 0, MUSIC_BUFFER_SIZE);
-					if (err == AudioRecord.ERROR_INVALID_OPERATION ||
-							err == AudioRecord.ERROR_BAD_VALUE) {
-						Log.wtf(TAG, "Failed to read buffer. Error: " + err);
+					//err = ar.read(buf, 0, MUSIC_BUFFER_SIZE);
+					//if (err == AudioRecord.ERROR_INVALID_OPERATION ||
+					//		err == AudioRecord.ERROR_BAD_VALUE) {
+					//	Log.wtf(TAG, "Failed to read buffer. Error: " + err);
+					//}
+					
+					//Added by akshay
+					ar.read(onset_buf, 0, ONSET_BUFFER_SIZE);
+					
+					for(int i=0;i<onset_buf.length;i++)
+					{
+						onset_buf_float[i] = (float)(onset_buf[i]*(1.0f/32768.0f));
 					}
+												   										
+					bdetect.detect(onset_buf_float);
+					
+					if(reset_counter >= 4)
+					{
+						Log.d(TAG, "Pattern detected " + String.valueOf(pattern[0]) + " " +
+								String.valueOf(pattern[1]) + " " + 	
+								String.valueOf(pattern[2]) + " " +
+								String.valueOf(pattern[3]));
+						pattern_onSet = String.valueOf(pattern[0]) + String.valueOf(pattern[1]) +
+								String.valueOf(pattern[2]) + String.valueOf(pattern[3]);
+					}
+					
+					if(bdetect.isOnset() && reset_counter < 4)
+					{						
+						if(System.currentTimeMillis() - currentTime > 2100)
+						{							
+							Log.d(TAG, "Onset Detected, counter reset at " + String.valueOf(counter));	
+							pattern[reset_counter] = counter;
+							counter = 0;
+							currentTime = System.currentTimeMillis();
+							reset_counter++;		
+							pattern_onSet = String.valueOf(pattern[0]) + String.valueOf(pattern[1]) +
+									String.valueOf(pattern[2]) + String.valueOf(pattern[3]);
+						}
+						else
+						{
+							counter++;
+							Log.d(TAG, "Onset Detected " + String.valueOf(counter));							
+						}
+					}
+					//end
 
 					int index = 0;
-					for (int i=0; i<MUSIC_BUFFER_SIZE; i++) {
+					for (int i=0; i<ONSET_BUFFER_SIZE; i++) {
 						// Setup visualizer FFT input						
-						visualizerFreqData[index] = (double)buf[i]*visualizerHann[i];
+						visualizerFreqData[index] = (double)onset_buf[i]*visualizerHann[i];
 						visualizerFreqData[index+1] = 0;						
 
 						// buffer data				
 						if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
-							tempBuffer[index] = (byte)(buf[i]&0xFF);
-							tempBuffer[index+1] = (byte)((buf[i]&0xFF00)>>8);
+							tempBuffer[index] = (byte)(onset_buf[i]&0xFF);
+							tempBuffer[index+1] = (byte)((onset_buf[i]&0xFF00)>>8);
 						} else {
-							tempBuffer[index] = (byte)((buf[i]&0xFF00)>>8);
-							tempBuffer[index+1] = (byte)(buf[i]&0xFF);
+							tempBuffer[index] = (byte)((onset_buf[i]&0xFF00)>>8);
+							tempBuffer[index+1] = (byte)(onset_buf[i]&0xFF);
 						}
 						//Log.d(TAG,"saving in byte");
 
@@ -430,10 +499,10 @@ public class ListenActivity extends Activity implements Runnable {
 					{
 						// Limit size to under 7mb
 						// This converts to a bit over 5 minutes of recording time
-						if (bos != null && 2*MUSIC_BUFFER_SIZE*numLoops < 7000000) 
+						if (bos != null && 2*ONSET_BUFFER_SIZE*numLoops < 7000000) 
 						{
-							bos.write(tempBuffer, 0, MUSIC_BUFFER_SIZE*2);
-							os.write(tempBuffer, 0, MUSIC_BUFFER_SIZE*2);							
+							bos.write(tempBuffer, 0, ONSET_BUFFER_SIZE*2);
+							os.write(tempBuffer, 0, ONSET_BUFFER_SIZE*2);							
 						} 
 						else 
 						{
@@ -446,7 +515,7 @@ public class ListenActivity extends Activity implements Runnable {
 					} 
 					catch (IOException e) 
 					{
-						Log.e(TAG, "Error writing to "+MUSIC_DATA_FILE, e);
+						Log.e(TAG, "Error writing to "+ MUSIC_DATA_FILE, e);
 					}
 
 					// Results are in-line with freq_data;
@@ -825,10 +894,10 @@ public class ListenActivity extends Activity implements Runnable {
 					if (bis != null) 
 					{ 
 						error = bis.read(buf, 0, 2);
-						float_buf[l] = (float)buf[0];
-						Log.d(TAG, "floatvalue0 "+ String.valueOf(float_buf[l]) );
-						float_buf[l+1] = (float)buf[1];
-						Log.d(TAG, "floatvalue1 "+ String.valueOf(float_buf[l+1]) );
+						//float_buf[l] = (float)buf[0];
+						//Log.d(TAG, "floatvalue0 "+ String.valueOf(float_buf[l]) );
+						//float_buf[l+1] = (float)buf[1];
+						//Log.d(TAG, "floatvalue1 "+ String.valueOf(float_buf[l+1]) );
 						//Added by Akshay - Beat Detect
 						
 					}
@@ -862,11 +931,11 @@ public class ListenActivity extends Activity implements Runnable {
 			}
    //added by akshay
 			//begin
-			BeatDetect bdetect = new BeatDetect();			
+			/*BeatDetect bdetect = new BeatDetect();			
 			bdetect.detect(float_buf);
 			
 			if(bdetect.isOnset())
-				Log.e(TAG, "Onset detected");
+				Log.e(TAG, "Onset detected");*/
 			//end
 		
 			int j = 0;
