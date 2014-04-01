@@ -1,26 +1,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:pixlui="http://schemas.android.com/apk/com.neopixl.pixlui"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
+    android:background="@drawable/background"
     tools:context=".MainActivity" >
-<Button
-        android:id="@+id/FileNamebutton"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Filenames"
-        android:onClick="getFileNames" />
-    <TextView
+
+    <com.neopixl.pixlui.components.textview.TextView
         android:id="@+id/welcomeTextView"
         android:layout_width="fill_parent"
+        android:layout_marginTop="40dp"
+        android:layout_margin="20dp"
         android:layout_height="0dp"
-        android:layout_weight="10"
+        android:layout_weight="1.5"
         android:gravity="center_vertical|center_horizontal"
-        android:text="@string/welcome_msg"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="ACOUSTICA!"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        pixlui:typeface="newfont2.TTF"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        
+        
+        android:textColor="#FFFF34"
+        
+        />
+        
     
-	<ImageButton
+	<!-- <ImageButton
 	    android:id="@+id/mozartImageButton"
 	    android:layout_width="fill_parent"
 	    android:layout_height="0dp"
@@ -29,30 +36,64 @@
 	    android:gravity="center_vertical|center_horizontal"
 	    android:scaleType="fitXY"
 	    android:src="@drawable/plug_guitar" />
-
-	<TextView
+ -->
+<!-- 	<TextView
 	    android:id="@+id/TextView01"
 	    android:layout_width="fill_parent"
 	    android:layout_height="0dp"
-	    android:layout_weight="8"
+	    android:layout_weight="1"
 	    android:gravity="center_vertical|center_horizontal"
-	    android:text="@string/plug_instrument"
-	    android:textAppearance="?android:attr/textAppearanceSmall" />
+	    android:text=""
+	    android:textAppearance="?android:attr/textAppearanceSmall"
+	 /> -->
+	<TableLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:orientation="horizontal"
+        
+        android:stretchColumns="*" >
 
-    <Button
+        <TableRow>
+                   
+
+        <com.neopixl.pixlui.components.button.Button
         android:id="@+id/startButton"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="20"
-        android:text="START RECORDING"
-        android:onClick="AcquireTempo" />
-
-    <Button
+        
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="40dp"
+        android:text="Start Recording"
+        android:onClick="AcquireTempo"
+        android:background="#AEC26B"
+        pixlui:typeface="newfont2.TTF"
+        android:textSize="40sp"
+        android:textStyle="bold" />
+            </TableRow>
+            
+            <TableRow>
+            
+        <com.neopixl.pixlui.components.button.Button
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="20dp"
         android:id="@+id/exitButton"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="20"
-        android:text="@string/exit_msg"
-        android:onClick="exitMain" />
+        
+        android:text="Exit"
+        android:onClick="exitMain" 
+        android:background="#AEC26B"
+        pixlui:typeface="newfont2.TTF"
+        android:textSize="40sp"
+        android:textStyle="bold"/>
+        </TableRow>
+    </TableLayout>
+	
+
+    
+
+    
 
 </LinearLayout>

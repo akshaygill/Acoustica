@@ -114,6 +114,11 @@ public class FileBrowse  extends Activity{
 	}
 	//options menu
 	@Override
+	public void onBackPressed() {
+		pm.stopPlaying();
+		finish();
+	}
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    MenuInflater inflater = getMenuInflater();
 	    //inflater.inflate(R.menu.game_menu, menu);

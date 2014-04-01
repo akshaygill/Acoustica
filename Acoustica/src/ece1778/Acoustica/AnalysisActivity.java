@@ -32,6 +32,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import ece1778.Acoustica.Filebrowser.FileBrowse;
 import ece1778.Acoustica.Stitching.*;
 
 public class AnalysisActivity extends Activity {
@@ -121,7 +122,7 @@ public class AnalysisActivity extends Activity {
 		//TODO remove? myPatternRecognition = new PatternRecognition();
 
 		progressBar = (ProgressBar)findViewById(R.id.analysisProgressBar);
-		TextViewAnalysis = (TextView)findViewById(R.id.analysisTextView);
+//		TextViewAnalysis = (TextView)findViewById(R.id.analysisTextView);
 		//Pattern = (TextView)findViewById(R.id.pattern);
 		boNoteAnalysisCompleted = false;
 
@@ -144,7 +145,7 @@ public class AnalysisActivity extends Activity {
 				new NoteAnalysis().execute();
 			}
 			if (CallActivity.equals(LIBRARY_ACTIVITY)) {
-				TextViewAnalysis.setText("MUSICAL KEY identified: " + KeyValue + " major");
+				//TextViewAnalysis.setText("MUSICAL KEY identified: " + KeyValue + " major");
 				drawMusicScore();
 			}
 			boNoteAnalysisCompleted = true;
@@ -195,6 +196,11 @@ public class AnalysisActivity extends Activity {
 //		}
 //	}	
 
+	//Music library Button 
+	public void getFileNames(View view){
+		Intent filenameIntent = new Intent(this,FileBrowse.class);
+		startActivity(filenameIntent);
+	}
 	/*****************************************************************/
 	/*                 SAVE Button user click method                 */
 	/*****************************************************************/
@@ -284,7 +290,7 @@ public class AnalysisActivity extends Activity {
 	private class NoteAnalysis extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected void onPreExecute() {
-			TextViewAnalysis.setText("Analyzing fundamental frequencies for \na preliminary note analysis");
+		//	TextViewAnalysis.setText("Analyzing fundamental frequencies for \na preliminary note analysis");
 		}
 
 		/***************** doInBackground START **********************/
@@ -385,11 +391,11 @@ public class AnalysisActivity extends Activity {
 			//Log.v(TAG3, "onPostExecute() start - PASS");
 
 			if (boUnknownKEY.get() == false) {
-				TextViewAnalysis.setText("MUSICAL KEY identified: " + KeyValue + " major");
+			//	TextViewAnalysis.setText("MUSICAL KEY identified: " + KeyValue + " major");
 			}
 			else {
-				TextViewAnalysis.setText("Unable to determine Key. Play more notes or cut out some notes from outside of the key\n" +
-						"Forcing KEY to be C major");
+			//	TextViewAnalysis.setText("Unable to determine Key. Play more notes or cut out some notes from outside of the key\n" +
+			//			"Forcing KEY to be C major");
 			}
 
 			progressBar.setVisibility(View.INVISIBLE);   /* Make progress bar invisible */

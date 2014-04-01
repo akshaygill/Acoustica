@@ -24,13 +24,14 @@ public class Main extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		
 		return true;
 	}
 	//added by nitin
-	public void getFileNames(View view){
-		Intent filenameIntent = new Intent(this,FileBrowse.class);
-		startActivity(filenameIntent);
-	}
+//	public void getFileNames(View view){
+//		Intent filenameIntent = new Intent(this,FileBrowse.class);
+//		startActivity(filenameIntent);
+//	}
 
 	/*****************************************************************/
     /*                 START Button user click method                */
@@ -72,15 +73,18 @@ public class Main extends Activity {
     /*****************************************************************/
     /*                 MENU ITEM Buttons                             */
     /*****************************************************************/
+//    
 //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {
 //        switch (item.getItemId()) {
-//    		case R.id.menu_home:
-//    			//finish();
-//    			//Intent homeIntent = new Intent(this, Main.class);
-//    			//startActivity(homeIntent);
-//    			return true;
-//
+//        case default:
+//    			Intent filenameIntent = new Intent(this,FileBrowse.class);
+//    			startActivity(filenameIntent);
+    			//finish();
+    			//Intent homeIntent = new Intent(this, Main.class);
+    			//startActivity(homeIntent);
+   // 			return true;
+
 //        	case R.id.menu_transcribe:
 //        		Intent transcribeIntent = new Intent(this, AcquireTempoActivity.class);
 //                startActivity(transcribeIntent);
@@ -96,10 +100,10 @@ public class Main extends Activity {
 //        		Intent infoIntent = new Intent(this, InfoActivity.class);
 //                startActivity(infoIntent);
 //        		return true;
-//
+
 //            default:
 //                return super.onOptionsItemSelected(item);
 //        }
 //    }
-//    
+    
 }

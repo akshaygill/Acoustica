@@ -1,10 +1,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:pixlui="http://schemas.android.com/apk/com.neopixl.pixlui"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/background"
     tools:context=".AnalysisActivity" >
-
+<!-- 
     <TextView
         android:id="@+id/analysisTextView"
         android:layout_width="match_parent"
@@ -12,50 +14,83 @@
         android:layout_weight="10"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/default_analysis_msg" />
-
+ -->
     <ProgressBar
         android:id="@+id/analysisProgressBar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5"
+        android:layout_weight="0.5"
         android:gravity="center_vertical|center_horizontal"
-        android:visibility="invisible" />
+        android:visibility="invisible" 
+        android:background="#AEC26B"/>
 
     <HorizontalScrollView
         android:id="@+id/musicScoreLayout"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="60" />
-
-    
+        android:layout_weight="0.25"
+          />
 
     <TableLayout
         android:id="@+id/buttonLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="10"
-        android:orientation="vertical"
+        android:layout_weight="2.5"
+        android:orientation="horizontal"
+        
         android:stretchColumns="*" >
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+        <TableRow>
+                   
 
-           
-
-          
-
-            <Button
+            <com.neopixl.pixlui.components.button.Button
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="40dp"
                 android:id="@+id/doneAnalysisButton"
                 android:onClick="doneAnalysis"
-                android:text="CREATE" />
+                android:text="Create"
+                android:background="#AEC26B"
+                pixlui:typeface="newfont2.TTF"
+      		  android:textSize="40sp"
+       			 android:textStyle="bold"
+       			 android:padding="10dp" />
+            </TableRow>
             
-             <Button
+            <TableRow>
+            
+        
+             <com.neopixl.pixlui.components.button.Button
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="40dp"
                 android:id="@+id/saveAnalysisButton"
                 android:onClick="PlayFunc"
                 android:enabled="false"
-                android:text="PLAY" />
+                android:text="Play"
+                android:background="#AEC26B"
+                pixlui:typeface="newfont2.TTF"
+        		android:textSize="40sp"
+        		android:textStyle="bold"
+        		 android:padding="10dp"  />
         </TableRow>
+        <TableRow>
+
+        </TableRow>
+
+        <com.neopixl.pixlui.components.button.Button
+            android:id="@+id/libraryButton"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="#AEC26B"
+            android:enabled="true"
+            android:onClick="getFileNames"
+            android:padding="10dp"
+            android:text="Music Library"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            pixlui:typeface="newfont2.TTF" />
+             
     </TableLayout>
 
 </LinearLayout>
