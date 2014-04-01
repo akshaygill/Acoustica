@@ -315,10 +315,8 @@ public class MusicScore extends View {
 				
 				if (barGauge >= FULL_BAR) {
 					barGauge = 0d;
-					
 					pattern_idx+=1;
-					count_notes=0;			
-					
+					count_notes = 0;
 					drawSymbol(BAR);
 				}		
 				else
@@ -638,37 +636,37 @@ public class MusicScore extends View {
 
 	// Draw the note (not dotted)
 	public void drawNote(int type, int pitch) {
-//		drawNote(type, pitch, NOT_DOTTED);
+		drawNote(type, pitch, NOT_DOTTED);
 	}
 
 	// Draw the accidental at a specific height on the staff (for key signature use!!!)
 	// Draws the accidental at the specified pitch and also 2 octaves below it
 	private void drawAccidental(int pitch, char accidental) {
-//		 This tells us where to place the note on the staff
-//		int noteId = getNoteId(pitch);
-//		int offset = NOTE_DIFF*(getRelativeNoteInfo(noteId).relNoteId-23);
-//
-//		// Draw the natural 'n', sharp '#', or flat 'b' accidental
-//		switch (accidental) {
-//		case ACCIDENTAL_NATURAL:
-//			canvas.drawBitmap(symbol[NATURAL], rel[X]+nextNoteX, rel[Y]-3*NOTE_DIFF+offset, null);
-//			canvas.drawBitmap(symbol[NATURAL], rel[X]+nextNoteX, rel[Y]+11*NOTE_DIFF+offset, null);
-//			nextNoteX += 24;
-//			break;
-//		case ACCIDENTAL_SHARP:
-//			canvas.drawBitmap(symbol[SHARP], rel[X]+nextNoteX, rel[Y]-3*NOTE_DIFF+offset, null);
-//			canvas.drawBitmap(symbol[SHARP], rel[X]+nextNoteX, rel[Y]+11*NOTE_DIFF+offset, null);
-//			nextNoteX += 24;
-//			break;
-//		case ACCIDENTAL_FLAT:
-//			canvas.drawBitmap(symbol[FLAT], rel[X]+nextNoteX, rel[Y]-3*NOTE_DIFF+offset, null);
-//			canvas.drawBitmap(symbol[FLAT], rel[X]+nextNoteX, rel[Y]+11*NOTE_DIFF+offset, null);
-//			nextNoteX += 24;
-//			break;
-//		default:
-//			Log.w(TAG, "Unsupported accidental "+accidental);
-//			break;
-//		}
+		// This tells us where to place the note on the staff
+		int noteId = getNoteId(pitch);
+		int offset = NOTE_DIFF*(getRelativeNoteInfo(noteId).relNoteId-23);
+
+		// Draw the natural 'n', sharp '#', or flat 'b' accidental
+		switch (accidental) {
+		case ACCIDENTAL_NATURAL:
+			canvas.drawBitmap(symbol[NATURAL], rel[X]+nextNoteX, rel[Y]-3*NOTE_DIFF+offset, null);
+			canvas.drawBitmap(symbol[NATURAL], rel[X]+nextNoteX, rel[Y]+11*NOTE_DIFF+offset, null);
+			nextNoteX += 24;
+			break;
+		case ACCIDENTAL_SHARP:
+			canvas.drawBitmap(symbol[SHARP], rel[X]+nextNoteX, rel[Y]-3*NOTE_DIFF+offset, null);
+			canvas.drawBitmap(symbol[SHARP], rel[X]+nextNoteX, rel[Y]+11*NOTE_DIFF+offset, null);
+			nextNoteX += 24;
+			break;
+		case ACCIDENTAL_FLAT:
+			canvas.drawBitmap(symbol[FLAT], rel[X]+nextNoteX, rel[Y]-3*NOTE_DIFF+offset, null);
+			canvas.drawBitmap(symbol[FLAT], rel[X]+nextNoteX, rel[Y]+11*NOTE_DIFF+offset, null);
+			nextNoteX += 24;
+			break;
+		default:
+			Log.w(TAG, "Unsupported accidental "+accidental);
+			break;
+		}
 	}
 
 	// Convert from pitch number to note Id
@@ -689,108 +687,108 @@ public class MusicScore extends View {
 	// OR draw the accidental alone (uses pitch and accidental parameter, type=NONE)
 	// Boundaries where you start placing ledger lines
 	private void drawNote(int type, int pitch, boolean dotted) {
-//		final int A5 = 28;
-//		final int C4 = 49;
-//		final int E2 = 69;
-//		int A5_REL = getRelativeNoteInfo(A5).relNoteId; 
-//		int C4_REL = getRelativeNoteInfo(C4).relNoteId;
-//		int E2_REL = getRelativeNoteInfo(E2).relNoteId;
-//
-//		// Ledger line offsets
-//		final int LEDGER_X_OFFSET = 66;
-//
-//		if (pitch < 0 || pitch > 88) {
-//			Log.w(TAG, "Invalid note pitch "+pitch+". Nothing will be drawn.");			
-//		} else if (pitch == 0) {
-//			// Draw rests
-//			drawRest(type, dotted);
-//		} else {
-//			// Invert noteID to make graphics positioning easier 
-//			int noteId = getNoteId(pitch);
-//
-//			// This tells us where to place the note on the staff
-//			RelativeNoteIdInfo noteInfo = getRelativeNoteInfo(noteId);
-//			int offset = NOTE_DIFF*(noteInfo.relNoteId-23);
-//			char accidental = noteInfo.accidental;
-//
-//			//Log.v(TAG, "Accidental: "+accidental);
-//
-//			// Draw the natural 'n', sharp '#', or flat 'b' accidental
-//			// according to the key signature
-//			switch (accidental) {
-//			case ACCIDENTAL_NATURAL:
-//				canvas.drawBitmap(symbol[NATURAL], rel[X]+nextNoteX, rel[Y]-3*NOTE_DIFF+offset, null);
-//				nextNoteX += 14;
-//				break;
-//			case ACCIDENTAL_SHARP:
-//				canvas.drawBitmap(symbol[SHARP], rel[X]+nextNoteX, rel[Y]-3*NOTE_DIFF+offset, null);
-//				nextNoteX += 14;
-//				break;
-//			case ACCIDENTAL_FLAT:
-//				canvas.drawBitmap(symbol[FLAT], rel[X]+nextNoteX, rel[Y]-3*NOTE_DIFF+offset, null);
-//				nextNoteX += 14;
-//				break;
-//			case ACCIDENTAL_NONE:
-//				// Don't draw anything
-//				break;
-//			default:
-//				Log.w(TAG, "Unsupported accidental "+accidental+" used in music notes");
-//				break;
-//			}
-//
-//			// Draw ledger lines if necessary (do this before drawing the notes)
-//			if (noteInfo.relNoteId == C4_REL) {
-//				canvas.drawBitmap(symbol[LEDGER], rel[X]+nextNoteX+LEDGER_X_OFFSET, rel[Y]+50+10*NOTE_DIFF, null);
-//			} else if (noteInfo.relNoteId <= A5_REL) {		
-//				int m = numStaffLinesBetween(A5+2, noteId);
-//				while (m > 0) {
-//					canvas.drawBitmap(symbol[LEDGER], rel[X]+nextNoteX+LEDGER_X_OFFSET, rel[Y]+50-m*2*NOTE_DIFF, null);
-//					m--;
-//				}				
-//			} else if (noteInfo.relNoteId >= E2_REL) {				
-//				int m = numStaffLinesBetween(E2-1, noteId);
-//				while (m > 0) {
-//					canvas.drawBitmap(symbol[LEDGER], rel[X]+nextNoteX+LEDGER_X_OFFSET, rel[Y]+50+(m*2+20)*NOTE_DIFF, null);
-//					m--;
-//				}		
-//			}	
-//
-//			// Draw the note (also increment next note position)
-//			switch (type) {
-//			case DOUBLE_WHOLE:
-//			case WHOLE:
-//				canvas.drawBitmap(note[type], rel[X]+nextNoteX, rel[Y]+50+offset, null);
-//				nextNoteX += DEFAULT_DISTANCE;
-//				if (dotted == DOTTED) {
-//					canvas.drawOval(new RectF(rel[X]+nextNoteX+DOT_OFFSET_X-DOT_RADIUS,
-//							rel[Y]+DOT_OFFSET_Y-DOT_RADIUS+50+offset,
-//							rel[X]+nextNoteX+DOT_OFFSET_X+DOT_RADIUS,
-//							rel[Y]+DOT_OFFSET_Y+DOT_RADIUS+50+offset), blackFillPaint);
-//				}
-//				break;
-//			case HALF:
-//			case QUARTER:
-//			case EIGHTH:
-//			case SIXTEENTH:
-//				canvas.drawBitmap(note[type], rel[X]+nextNoteX, rel[Y]-3*NOTE_DIFF+offset, null);
-//				nextNoteX += DEFAULT_DISTANCE;
-//				if (dotted == DOTTED) {
-//					canvas.drawOval(new RectF(rel[X]+nextNoteX+DOT_OFFSET_X-DOT_RADIUS,
-//							rel[Y]+DOT_OFFSET_Y-DOT_RADIUS-3*NOTE_DIFF+offset,
-//							rel[X]+nextNoteX+DOT_OFFSET_X+DOT_RADIUS,
-//							rel[Y]+DOT_OFFSET_Y+DOT_RADIUS-3*NOTE_DIFF+offset), blackFillPaint);
-//				}
-//				break;
-//			default:
-//				Log.w(TAG, "Invalid note type "+type+". Nothing will be drawn.");
-//				break;
-//			}
-//
-//			// Extend the staff
-//			if (nextNoteX > nextStaffX) {
-//				drawSymbol(STAFF);
-//			}		
-//		}
+		final int A5 = 28;
+		final int C4 = 49;
+		final int E2 = 69;
+		int A5_REL = getRelativeNoteInfo(A5).relNoteId; 
+		int C4_REL = getRelativeNoteInfo(C4).relNoteId;
+		int E2_REL = getRelativeNoteInfo(E2).relNoteId;
+
+		// Ledger line offsets
+		final int LEDGER_X_OFFSET = 66;
+
+		if (pitch < 0 || pitch > 88) {
+			Log.w(TAG, "Invalid note pitch "+pitch+". Nothing will be drawn.");			
+		} else if (pitch == 0) {
+			// Draw rests
+			drawRest(type, dotted);
+		} else {
+			// Invert noteID to make graphics positioning easier 
+			int noteId = getNoteId(pitch);
+
+			// This tells us where to place the note on the staff
+			RelativeNoteIdInfo noteInfo = getRelativeNoteInfo(noteId);
+			int offset = NOTE_DIFF*(noteInfo.relNoteId-23);
+			char accidental = noteInfo.accidental;
+
+			//Log.v(TAG, "Accidental: "+accidental);
+
+			// Draw the natural 'n', sharp '#', or flat 'b' accidental
+			// according to the key signature
+			switch (accidental) {
+			case ACCIDENTAL_NATURAL:
+				canvas.drawBitmap(symbol[NATURAL], rel[X]+nextNoteX, rel[Y]-3*NOTE_DIFF+offset, null);
+				nextNoteX += 14;
+				break;
+			case ACCIDENTAL_SHARP:
+				canvas.drawBitmap(symbol[SHARP], rel[X]+nextNoteX, rel[Y]-3*NOTE_DIFF+offset, null);
+				nextNoteX += 14;
+				break;
+			case ACCIDENTAL_FLAT:
+				canvas.drawBitmap(symbol[FLAT], rel[X]+nextNoteX, rel[Y]-3*NOTE_DIFF+offset, null);
+				nextNoteX += 14;
+				break;
+			case ACCIDENTAL_NONE:
+				// Don't draw anything
+				break;
+			default:
+				Log.w(TAG, "Unsupported accidental "+accidental+" used in music notes");
+				break;
+			}
+
+			// Draw ledger lines if necessary (do this before drawing the notes)
+			if (noteInfo.relNoteId == C4_REL) {
+				canvas.drawBitmap(symbol[LEDGER], rel[X]+nextNoteX+LEDGER_X_OFFSET, rel[Y]+50+10*NOTE_DIFF, null);
+			} else if (noteInfo.relNoteId <= A5_REL) {		
+				int m = numStaffLinesBetween(A5+2, noteId);
+				while (m > 0) {
+					canvas.drawBitmap(symbol[LEDGER], rel[X]+nextNoteX+LEDGER_X_OFFSET, rel[Y]+50-m*2*NOTE_DIFF, null);
+					m--;
+				}				
+			} else if (noteInfo.relNoteId >= E2_REL) {				
+				int m = numStaffLinesBetween(E2-1, noteId);
+				while (m > 0) {
+					canvas.drawBitmap(symbol[LEDGER], rel[X]+nextNoteX+LEDGER_X_OFFSET, rel[Y]+50+(m*2+20)*NOTE_DIFF, null);
+					m--;
+				}		
+			}	
+
+			// Draw the note (also increment next note position)
+			switch (type) {
+			case DOUBLE_WHOLE:
+			case WHOLE:
+				canvas.drawBitmap(note[type], rel[X]+nextNoteX, rel[Y]+50+offset, null);
+				nextNoteX += DEFAULT_DISTANCE;
+				if (dotted == DOTTED) {
+					canvas.drawOval(new RectF(rel[X]+nextNoteX+DOT_OFFSET_X-DOT_RADIUS,
+							rel[Y]+DOT_OFFSET_Y-DOT_RADIUS+50+offset,
+							rel[X]+nextNoteX+DOT_OFFSET_X+DOT_RADIUS,
+							rel[Y]+DOT_OFFSET_Y+DOT_RADIUS+50+offset), blackFillPaint);
+				}
+				break;
+			case HALF:
+			case QUARTER:
+			case EIGHTH:
+			case SIXTEENTH:
+				canvas.drawBitmap(note[type], rel[X]+nextNoteX, rel[Y]-3*NOTE_DIFF+offset, null);
+				nextNoteX += DEFAULT_DISTANCE;
+				if (dotted == DOTTED) {
+					canvas.drawOval(new RectF(rel[X]+nextNoteX+DOT_OFFSET_X-DOT_RADIUS,
+							rel[Y]+DOT_OFFSET_Y-DOT_RADIUS-3*NOTE_DIFF+offset,
+							rel[X]+nextNoteX+DOT_OFFSET_X+DOT_RADIUS,
+							rel[Y]+DOT_OFFSET_Y+DOT_RADIUS-3*NOTE_DIFF+offset), blackFillPaint);
+				}
+				break;
+			default:
+				Log.w(TAG, "Invalid note type "+type+". Nothing will be drawn.");
+				break;
+			}
+
+			// Extend the staff
+			if (nextNoteX > nextStaffX) {
+				drawSymbol(STAFF);
+			}		
+		}
 	}
 
 	// Determines whether the input pitch has an enharmonic equivalent note
@@ -896,32 +894,32 @@ public class MusicScore extends View {
 	}
 
 	private void drawRest(int type, boolean dotted) {
-//		switch (type) {
-//		case DOUBLE_WHOLE:
-//		case WHOLE:
-//		case HALF:
-//		case QUARTER:
-//		case EIGHTH:
-//		case SIXTEENTH:
-//			canvas.drawBitmap(rest[type], rel[X]+nextNoteX, rel[Y]+50, null);
-//			//canvas.drawBitmap(rest[type], rel[X]+nextNoteX, rel[Y]+50+STAFF_DIFF, null);
-//			nextNoteX += DEFAULT_DISTANCE;
-//			if (dotted == DOTTED) {
-//				canvas.drawOval(new RectF(rel[X]+nextNoteX+DOT_OFFSET_X-DOT_RADIUS,
-//						rel[Y]+DOT_OFFSET_Y-DOT_RADIUS-36,
-//						rel[X]+nextNoteX+DOT_OFFSET_X+DOT_RADIUS,
-//						rel[Y]+DOT_OFFSET_Y+DOT_RADIUS-36), blackFillPaint);
-//			}
-//			break;
-//		default:
-//			Log.w(TAG, "Invalid rest type "+type+". Nothing will be drawn.");
-//			break;
-//		}
-//
-//		// Extend the staff
-//		if (nextNoteX > nextStaffX) {
-//			drawSymbol(STAFF);
-//		}	
+		switch (type) {
+		case DOUBLE_WHOLE:
+		case WHOLE:
+		case HALF:
+		case QUARTER:
+		case EIGHTH:
+		case SIXTEENTH:
+			canvas.drawBitmap(rest[type], rel[X]+nextNoteX, rel[Y]+50, null);
+			//canvas.drawBitmap(rest[type], rel[X]+nextNoteX, rel[Y]+50+STAFF_DIFF, null);
+			nextNoteX += DEFAULT_DISTANCE;
+			if (dotted == DOTTED) {
+				canvas.drawOval(new RectF(rel[X]+nextNoteX+DOT_OFFSET_X-DOT_RADIUS,
+						rel[Y]+DOT_OFFSET_Y-DOT_RADIUS-36,
+						rel[X]+nextNoteX+DOT_OFFSET_X+DOT_RADIUS,
+						rel[Y]+DOT_OFFSET_Y+DOT_RADIUS-36), blackFillPaint);
+			}
+			break;
+		default:
+			Log.w(TAG, "Invalid rest type "+type+". Nothing will be drawn.");
+			break;
+		}
+
+		// Extend the staff
+		if (nextNoteX > nextStaffX) {
+			drawSymbol(STAFF);
+		}	
 	}
 
 	
@@ -932,59 +930,59 @@ public class MusicScore extends View {
 	
 
 	private void drawSymbol(int type) {
-//		switch (type) {
-//		case TREBLE_CLEF:
-//		case BASE_CLEF:
-//			canvas.drawBitmap(symbol[TREBLE_CLEF], rel[X]+nextNoteX, rel[Y], null);
-//			canvas.drawBitmap(symbol[BASE_CLEF], rel[X]+nextNoteX, rel[Y]+50+STAFF_DIFF, null);
-//			nextNoteX += 70;
-//			break;
-//		case TIME_SIGNATURE_44:
-//			canvas.drawBitmap(symbol[TIME_SIGNATURE_44], rel[X]+nextNoteX, rel[Y]+50, null);
-//			canvas.drawBitmap(symbol[TIME_SIGNATURE_44], rel[X]+nextNoteX, rel[Y]+50+STAFF_DIFF, null);
-//			nextNoteX += 70;
-//			break;
-//		case NATURAL:
-//			Log.w(TAG, "Call to drawSymbol with argument NATURAL does nothing. Remove redundant call.");
-//		case SHARP:
-//			Log.w(TAG, "Call to drawSymbol with argument SHARP does nothing. Remove redundant call.");
-//		case FLAT:
-//			Log.w(TAG, "Call to drawSymbol with argument FLAT does nothing. Remove redundant call.");
-//			break;
-//		case TEMPO:
-//			canvas.drawBitmap(symbol[TEMPO], rel[X]+170, rel[Y]-60, null);
-//			canvas.drawText(Integer.toString(tempo), rel[X]+260, rel[Y]+2, blackPaint);
-//			break;
-//			// Draws the next staff segment
-//		case STAFF:
-//			canvas.drawBitmap(symbol[STAFF], rel[X]+nextStaffX, rel[Y]+50, null);
-//			canvas.drawBitmap(symbol[STAFF], rel[X]+nextStaffX, rel[Y]+50+STAFF_DIFF, null);
-//			nextStaffX += 200;	// increment next location by 200 pixels;
-//			break;
-//			// Draws all required ledger lines for the most recently placed note	
-//		case LEDGER:
-//			// Don't use this
-//			Log.w(TAG, "Call to drawSymbol with argument LEDGER does nothing. Remove redundant call.");
-//			break;
-//			// Draws a bar line to divide the bar
-//		case BAR:
-//			canvas.drawBitmap(symbol[BAR], rel[X]+nextNoteX, rel[Y]+50, null);
-//			canvas.drawBitmap(symbol[BAR], rel[X]+nextNoteX, rel[Y]+50+STAFF_DIFF, null);			
-//			nextNoteX += rel[X]+80;
-//			break;
-//			// Draws the end bar signifying the end of the music score
-//		case END_BAR:
-//			canvas.drawBitmap(symbol[END_BAR], rel[X]+nextStaffX-150, rel[Y]+50, null);
-//			canvas.drawBitmap(symbol[END_BAR], rel[X]+nextStaffX-150, rel[Y]+50+STAFF_DIFF, null);
-//			nextStaffX += 70;
-//			break;
-//		case KEY:
-//			// Draws the key signature
-//			drawKey();
-//			break;
-//		default:
-//			Log.w(TAG, "Invalid symbol type "+type+". Nothing will be drawn.");
-//			break;
-//		}
+		switch (type) {
+		case TREBLE_CLEF:
+		case BASE_CLEF:
+			canvas.drawBitmap(symbol[TREBLE_CLEF], rel[X]+nextNoteX, rel[Y], null);
+			canvas.drawBitmap(symbol[BASE_CLEF], rel[X]+nextNoteX, rel[Y]+50+STAFF_DIFF, null);
+			nextNoteX += 70;
+			break;
+		case TIME_SIGNATURE_44:
+			canvas.drawBitmap(symbol[TIME_SIGNATURE_44], rel[X]+nextNoteX, rel[Y]+50, null);
+			canvas.drawBitmap(symbol[TIME_SIGNATURE_44], rel[X]+nextNoteX, rel[Y]+50+STAFF_DIFF, null);
+			nextNoteX += 70;
+			break;
+		case NATURAL:
+			Log.w(TAG, "Call to drawSymbol with argument NATURAL does nothing. Remove redundant call.");
+		case SHARP:
+			Log.w(TAG, "Call to drawSymbol with argument SHARP does nothing. Remove redundant call.");
+		case FLAT:
+			Log.w(TAG, "Call to drawSymbol with argument FLAT does nothing. Remove redundant call.");
+			break;
+		case TEMPO:
+			canvas.drawBitmap(symbol[TEMPO], rel[X]+170, rel[Y]-60, null);
+			canvas.drawText(Integer.toString(tempo), rel[X]+260, rel[Y]+2, blackPaint);
+			break;
+			// Draws the next staff segment
+		case STAFF:
+			canvas.drawBitmap(symbol[STAFF], rel[X]+nextStaffX, rel[Y]+50, null);
+			canvas.drawBitmap(symbol[STAFF], rel[X]+nextStaffX, rel[Y]+50+STAFF_DIFF, null);
+			nextStaffX += 200;	// increment next location by 200 pixels;
+			break;
+			// Draws all required ledger lines for the most recently placed note	
+		case LEDGER:
+			// Don't use this
+			Log.w(TAG, "Call to drawSymbol with argument LEDGER does nothing. Remove redundant call.");
+			break;
+			// Draws a bar line to divide the bar
+		case BAR:
+			canvas.drawBitmap(symbol[BAR], rel[X]+nextNoteX, rel[Y]+50, null);
+			canvas.drawBitmap(symbol[BAR], rel[X]+nextNoteX, rel[Y]+50+STAFF_DIFF, null);			
+			nextNoteX += rel[X]+80;
+			break;
+			// Draws the end bar signifying the end of the music score
+		case END_BAR:
+			canvas.drawBitmap(symbol[END_BAR], rel[X]+nextStaffX-150, rel[Y]+50, null);
+			canvas.drawBitmap(symbol[END_BAR], rel[X]+nextStaffX-150, rel[Y]+50+STAFF_DIFF, null);
+			nextStaffX += 70;
+			break;
+		case KEY:
+			// Draws the key signature
+			drawKey();
+			break;
+		default:
+			Log.w(TAG, "Invalid symbol type "+type+". Nothing will be drawn.");
+			break;
+		}
 	}
 }
