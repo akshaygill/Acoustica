@@ -7,7 +7,7 @@
     android:background="@drawable/background"
     tools:context=".MainActivity" >
 
-    <com.neopixl.pixlui.components.textview.TextView
+   <!--  <com.neopixl.pixlui.components.textview.TextView
         android:id="@+id/welcomeTextView"
         android:layout_width="fill_parent"
         android:layout_marginTop="40dp"
@@ -24,7 +24,8 @@
         
         android:textColor="#FFFF34"
         
-        />
+        /> -->
+        
         
     
 	<!-- <ImageButton
@@ -46,6 +47,15 @@
 	    android:text=""
 	    android:textAppearance="?android:attr/textAppearanceSmall"
 	 /> -->
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:src="@drawable/ic_launcher" 
+        android:layout_margin="20dp"/>
+
 	<TableLayout
         android:id="@+id/buttonLayout"
         android:layout_width="match_parent"

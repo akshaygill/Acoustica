@@ -63,6 +63,7 @@ public final class R {
         public static final int editTextMaxFreq=0x7f050007;
         public static final int editTextMinFreq=0x7f050006;
         public static final int exitButton=0x7f050026;
+        public static final int imageView1=0x7f050024;
         public static final int inProgressTextView=0x7f05001a;
         public static final int libButtonLayout2=0x7f050014;
         public static final int libDeleteButton=0x7f050016;
@@ -104,7 +105,6 @@ public final class R {
         public static final int stopListeningButton=0x7f05001b;
         public static final int tapTempoimageButton=0x7f050004;
         public static final int tempoTextView=0x7f050003;
-        public static final int welcomeTextView=0x7f050024;
     }
     public static final class layout {
         public static final int activity_acquire_tempo=0x7f030000;
