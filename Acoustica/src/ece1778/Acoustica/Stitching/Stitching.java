@@ -28,7 +28,8 @@ public class Stitching
 	private static final String AUDIO_RECORDER_FILE_EXT_WAV = ".wav";
 	private static final String AUDIO_RECORDER_FOLDER = "AudioRecorder";
 	private static final String AUDIO_RECORDER_TEMP_OUTPUT_FILE = "record_temp_out.raw";
-	private static final String AUDIO_RECORDER_WAV_OUTPUT_FILE = "final_out.wav";
+	//private static final String AUDIO_RECORDER_WAV_OUTPUT_FILE = "final_out.wav";
+	public String AUDIO_RECORDER_WAV_OUTPUT_FILE = "Record ";
 
 	FileOutputStream os = null;
 
@@ -247,7 +248,7 @@ public class Stitching
 
 		 return buffer;
 	}
-
+private static int outputname =000;
 	private String getFilename()
 	{
 	    String filepath = Environment.getExternalStorageDirectory().getPath();
@@ -256,7 +257,8 @@ public class Stitching
 	    if(!file.exists()){
 	            file.mkdirs();
 	    }
-
+outputname++;
+AUDIO_RECORDER_WAV_OUTPUT_FILE=AUDIO_RECORDER_WAV_OUTPUT_FILE+String.valueOf(outputname)+".wav";
 	    return (file.getAbsolutePath() + "/" + AUDIO_RECORDER_WAV_OUTPUT_FILE);
 	}	
 	

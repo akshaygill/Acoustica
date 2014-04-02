@@ -125,7 +125,7 @@ public class BeatDetect
 		initSEResources();
 		initGraphs();
 		algorithm = SOUND_ENERGY;
-		sensitivity = 350;
+		sensitivity = 100;
 	}
 
 	/**
@@ -562,7 +562,7 @@ public class BeatDetect
 		// milliseconds since the last true value
 		if (System.currentTimeMillis() - timer < sensitivity)
 		{
-			Log.d("REJECTED", "ONSET FALSE");
+//			Log.d("REJECTED", "ONSET FALSE");
 			isOnset = false;
 		}
 		// if we've made it this far then we're allowed to set a new

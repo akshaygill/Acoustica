@@ -111,10 +111,10 @@ public class ListenActivity extends Activity implements Runnable {
 	//begin
 	boolean started = false;
 	boolean preStart=false;
-	short threshold=16384;
+	short threshold=8192;
 	int frequency = 44100; //8000;
 	private static final int RECORDER_BPP = 16;
-	private static final String AUDIO_RECORDER_FILE_EXT_WAV = ".wav";
+	private static final String AUDIO_RECORDER_FILE_EXT_WAV = ".war";
 	private static final String AUDIO_RECORDER_FOLDER = "AudioRecorder";
 	private static final String AUDIO_RECORDER_TEMP_FILE = "record_temp.raw";
 	private static final String AUDIO_RECORDER_TEMP_OUTPUT_FILE = "record_temp_out.raw";
@@ -348,7 +348,7 @@ public class ListenActivity extends Activity implements Runnable {
 	public void startRecording() {
 		
 		
-		pm.startPlaying("/ClickTrack/clicktrack.mp3");
+//		pm.startPlaying("/ClickTrack/clicktrack.mp3");
 		recordingState = AudioState.RECORDING;
 		 String filename = getTempFilename();
          try 
@@ -416,11 +416,12 @@ public class ListenActivity extends Activity implements Runnable {
 				  long currentTime = System.currentTimeMillis();
 					int counter = 0;
 					int reset_counter = 0;
-					int[] pattern = new int[4];
+					int[] pattern = new int[5];
 					pattern[0] = 1;
 					pattern[1] = 1;
 					pattern[2] = 1;
 					pattern[3] = 1;
+					pattern[4]=1;
 				 //end
 				while ((recordingState == AudioState.RECORDING) && started) {
 					// Read from buffer	
@@ -446,25 +447,34 @@ public class ListenActivity extends Activity implements Runnable {
 					
 					if(reset_counter >= 4)
 					{
-						Log.d(TAG, "Pattern detected " + String.valueOf(pattern[0]) + " " +
-								String.valueOf(pattern[1]) + " " + 	
-								String.valueOf(pattern[2]) + " " +
-								String.valueOf(pattern[3]));
-						pattern_onSet = String.valueOf(pattern[0]) + String.valueOf(pattern[1]) +
-								String.valueOf(pattern[2]) + String.valueOf(pattern[3]);
+						Log.d(TAG, "Pattern detected " + String.valueOf(pattern[1]) + " " +
+								String.valueOf(pattern[2]) + " " + 	
+								String.valueOf(pattern[3]) + " " +
+								String.valueOf(pattern[4]));
+						pattern_onSet = String.valueOf(pattern[1]) + String.valueOf(pattern[2]) +
+								String.valueOf(pattern[3]) + String.valueOf(pattern[4]);
 					}
 					
-					if(bdetect.isOnset() && reset_counter < 4)
+					if(bdetect.isOnset() && reset_counter <= 4)
 					{						
 						if(System.currentTimeMillis() - currentTime > 2100)
 						{							
 							Log.d(TAG, "Onset Detected, counter reset at " + String.valueOf(counter));	
+							
+							if(counter>5)
+							{
+								pattern[reset_counter] = 5;
+							}
+							else
+							{
 							pattern[reset_counter] = counter;
+							}
 							counter = 0;
 							currentTime = System.currentTimeMillis();
 							reset_counter++;		
-							pattern_onSet = String.valueOf(pattern[0]) + String.valueOf(pattern[1]) +
-									String.valueOf(pattern[2]) + String.valueOf(pattern[3]);
+							pattern_onSet = String.valueOf(pattern[1]) + String.valueOf(pattern[2]) +
+									String.valueOf(pattern[3]) + String.valueOf(pattern[4]);
+							
 						}
 						else
 						{
@@ -472,6 +482,8 @@ public class ListenActivity extends Activity implements Runnable {
 							Log.d(TAG, "Onset Detected " + String.valueOf(counter));							
 						}
 					}
+					
+			
 					//end
 
 					int index = 0;
@@ -733,7 +745,7 @@ public class ListenActivity extends Activity implements Runnable {
 			Log.e(TAG, "Interrupted while joining with audio recording thread", e);
 		}
 
-		pm.stopPlaying();
+//		pm.stopPlaying();
 	}
 
 	public void setupMic() {
