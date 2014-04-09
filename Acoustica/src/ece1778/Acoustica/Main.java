@@ -27,39 +27,21 @@ public class Main extends Activity {
 		
 		return true;
 	}
-	//added by nitin
-//	public void getFileNames(View view){
-//		Intent filenameIntent = new Intent(this,FileBrowse.class);
-//		startActivity(filenameIntent);
-//	}
 
 	/*****************************************************************/
     /*                 START Button user click method                */
     /*****************************************************************/
-    public void AcquireTempo(View view) {
-    	/* Acquire Tempo activity call */
-    	//Intent intent = new Intent(this, AcquireTempoActivity.class);
-        //startActivity(intent);    	
+    public void AcquireTempo(View view) { 	
     	
-    	/***** uncomment for integration with Mozart ear app*/
+    	/***** setting the parameters for recording and starting the recording activity*/
     	Intent listenIntent = new Intent(this, ListenActivity.class);
-		
 		Bundle bundle = new Bundle();
-				
 		bundle.putInt("tempo_value", 120);
-							
 		bundle.putInt("min_freq", 20);
 		bundle.putInt("max_freq", 20000);
 		
 		listenIntent.putExtras(bundle);
-		startActivity(listenIntent);
-//        
-//        Intent intent = new Intent(this, TestAudioCaptureWithThreshold.class);
-//        startActivity(intent);
-        
-//        Intent intent = new Intent(this, TestAudioCaptureWithThreshold.class);
-//        startActivity(intent);          
-//         
+		startActivity(listenIntent);        
 
     }
     
@@ -69,41 +51,5 @@ public class Main extends Activity {
     public void exitMain(View view) {
     	finish();
     }
-    
-    /*****************************************************************/
-    /*                 MENU ITEM Buttons                             */
-    /*****************************************************************/
-//    
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//        case default:
-//    			Intent filenameIntent = new Intent(this,FileBrowse.class);
-//    			startActivity(filenameIntent);
-    			//finish();
-    			//Intent homeIntent = new Intent(this, Main.class);
-    			//startActivity(homeIntent);
-   // 			return true;
-
-//        	case R.id.menu_transcribe:
-//        		Intent transcribeIntent = new Intent(this, AcquireTempoActivity.class);
-//                startActivity(transcribeIntent);
-//        		return true;
-//
-//        	case R.id.menu_library:
-//        		//finish();
-//        		Intent libraryIntent = new Intent(this, LibraryActivity.class);
-//                startActivity(libraryIntent);
-//        		return true;
-//
-//        	case R.id.menu_info:
-//        		Intent infoIntent = new Intent(this, InfoActivity.class);
-//                startActivity(infoIntent);
-//        		return true;
-
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
     
 }

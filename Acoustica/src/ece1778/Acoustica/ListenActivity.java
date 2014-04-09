@@ -103,12 +103,9 @@ public class ListenActivity extends Activity implements Runnable {
 	private int metroFrequency_ms;
 	private int TimeOFFSET_ms;
 	private String TempoType;
-	//private TextView TempoDisplay;
-	//private ImageView metroImage;
 	private View root = null;
 	
-	//Added by Nitin
-	//begin
+	
 	boolean started = false;
 	boolean preStart=false;
 	short threshold=8192;
@@ -121,13 +118,11 @@ public class ListenActivity extends Activity implements Runnable {
 	FileOutputStream os = null;
 	MediaPlayer mp = new MediaPlayer();
 	PlayMedia pm = new PlayMedia(mp);
-	//end
-	
-	//Added by Akshay
+
 	BeatDetect bdetect;
 	int beat_counter = 0;
-	String pattern_onSet = "1111";
-	//end
+	String pattern_onSet = "1111"; //default initial pattern
+	
 
 	/*****************************************************************/
 	/*                 onCreate()                                    */
@@ -138,9 +133,6 @@ public class ListenActivity extends Activity implements Runnable {
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		setContentView(R.layout.activity_listen);
 		root=findViewById(android.R.id.content);
-
-		//TempoDisplay = (TextView)findViewById(R.id.tempoValueTextView);
-
 		Bundle extras = getIntent().getExtras();
 		TempoValue = extras.getInt("tempo_value");
 		TempoType  = extras.getString("tempo_type");
@@ -149,10 +141,6 @@ public class ListenActivity extends Activity implements Runnable {
 
 		metroFrequency_ms = (60 * 1000) / TempoValue;
 		TimeOFFSET_ms = metroFrequency_ms / 50;   /* 20% time offset */
-
-		//TempoDisplay.setText(TempoValue + " BPM" + "\n( " + TempoType + " )");
-
-		//metroImage = (ImageView) findViewById(R.id.metroImageButton);
 
 		// Visualizer
 		visualizer = new Visualizer(this);
@@ -164,7 +152,6 @@ public class ListenActivity extends Activity implements Runnable {
 		linearLayout.addView(visualizer);
 
 		// File IO
-		//cacheDirectory = getCacheDir().toString()+"/";
 		cacheDirectory = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MozartsEar/";
 		
 		// Audio settings
@@ -200,9 +187,8 @@ public class ListenActivity extends Activity implements Runnable {
 			analysisHann[i] = hanningWindow((double)i, SPECTROGRAM_BUFFER_SIZE);
 		}
 		
-		//Added by Akshay - Beat Detect
-				bdetect = new BeatDetect();
-				//end
+		bdetect = new BeatDetect();
+				
 	}
 
 	/*****************************************************************/
@@ -232,26 +218,6 @@ public class ListenActivity extends Activity implements Runnable {
 	/*****************************************************************/
 	@Override
 	public void run() {
-
-//		if (TempoNum == 1) {
-//			metroImage.setImageResource(R.drawable.metro_1);
-//		}
-//		else if (TempoNum == 2) {
-//			metroImage.setImageResource(R.drawable.metro_2);
-//		}
-//		else if (TempoNum == 3) {
-//			metroImage.setImageResource(R.drawable.metro_3);
-//		}
-//		else {
-//			metroImage.setImageResource(R.drawable.metro_4);
-//		}
-//
-//		TempoNum++;
-//
-//		if (TempoNum > 4) {
-//			TempoNum = 1;
-//		}
-
 		root.postDelayed(this, metroFrequency_ms - TimeOFFSET_ms);
 	}
 
@@ -265,24 +231,10 @@ public class ListenActivity extends Activity implements Runnable {
 		return true;
 	}
 
-	/*****************************************************************/
-	/*         		  SET NEW TEMPO Button user click method        */
-	/*****************************************************************/
-//	public void setNewTempo(View view) {
-//		finish();
-//		Intent TempoIntent = new Intent(this, AcquireTempoActivity.class);
-//		startActivity(TempoIntent);
-//	}
+
 
 	/*****************************************************************/
-	/*                 MUTE/UNMUTE Button user click method          */
-	/*****************************************************************/
-//	public void muteMetronome(View view) {
-//
-//	}
-
-	/*****************************************************************/
-	/*           START/STOP LISTENING Button user click method       */
+	/*           STOP LISTENING Button user click method       */
 	/*****************************************************************/
 	public void stopListening(View view) {
 		stopRecording();
@@ -297,48 +249,15 @@ public class ListenActivity extends Activity implements Runnable {
 		AnalysisIntent.putExtra("tempo_ms", metroFrequency_ms);
 		AnalysisIntent.putExtra("noteFrequency", noteFrequency);
 		AnalysisIntent.putExtra("noteDuration", noteDuration);
-		//Added by Akshay
 		AnalysisIntent.putExtra("pattern_onSet", pattern_onSet);
 		Log.d("Listen", "The pattern found is : " + pattern_onSet);
-		//end
 		startActivity(AnalysisIntent);
 
 		root.removeCallbacks(this);
 		finish();
 	}
 
-//	/*****************************************************************/
-//	/*                 MENU ITEM Buttons                             */
-//	/*****************************************************************/
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		switch (item.getItemId()) {
-//		case R.id.menu_home_listen:
-//			finish();
-//			Intent homeIntent = new Intent(this, Main.class);
-//			startActivity(homeIntent);
-//			return true;
-//
-//		case R.id.menu_transcribe_listen:
-//			//Intent transcribeIntent = new Intent(this, AcquireTempoActivity.class);
-//			//startActivity(transcribeIntent);
-//			return true;
-//
-//		case R.id.menu_library_listen:
-//			Intent libraryIntent = new Intent(this, LibraryActivity.class);
-//			startActivity(libraryIntent);
-//			return true;
-//
-//		case R.id.menu_info_listen:
-//			Intent infoIntent = new Intent(this, InfoActivity.class);
-//			startActivity(infoIntent);
-//			return true;
-//
-//		default:
-//			return super.onOptionsItemSelected(item);
-//		}
-//	}
-	
+
 	
 	
 
@@ -348,7 +267,7 @@ public class ListenActivity extends Activity implements Runnable {
 	public void startRecording() {
 		
 		
-//		pm.startPlaying("/ClickTrack/clicktrack.mp3");
+
 		recordingState = AudioState.RECORDING;
 		 String filename = getTempFilename();
          try 
@@ -364,11 +283,9 @@ public class ListenActivity extends Activity implements Runnable {
 		audioRecordThread = new Thread(new Runnable() {
 			byte[] tempBuffer = new byte[ONSET_BUFFER_SIZE*2];	
 			short[] buf = new short[MUSIC_BUFFER_SIZE];
-
-			//Added by Akshay
 			short[] onset_buf = new short[ONSET_BUFFER_SIZE];
 			float[] onset_buf_float = new float[ONSET_BUFFER_SIZE];
-			//end
+			
 
 			@Override
 			public void run() {
@@ -383,8 +300,7 @@ public class ListenActivity extends Activity implements Runnable {
 
 				int numLoops = 0;
 				
-				//Added by Nitin
-				//Begin
+				
 				preStart=true;
 				 while(preStart)
 		         {
@@ -410,9 +326,7 @@ public class ListenActivity extends Activity implements Runnable {
 								}
 						}
 		         }
-				 //end 
-				 
-				 //Added by akshay
+				
 				  long currentTime = System.currentTimeMillis();
 					int counter = 0;
 					int reset_counter = 0;
@@ -422,20 +336,11 @@ public class ListenActivity extends Activity implements Runnable {
 					pattern[2] = 1;
 					pattern[3] = 1;
 					pattern[4]=1;
-				 //end
+				 
 				while ((recordingState == AudioState.RECORDING) && started) {
-					// Read from buffer	
 					
-					//Log.d(TAG,"reading from buffer");
-					//int err = 0;
-					//Receive audio from mic and put it in main buffer
-					//err = ar.read(buf, 0, MUSIC_BUFFER_SIZE);
-					//if (err == AudioRecord.ERROR_INVALID_OPERATION ||
-					//		err == AudioRecord.ERROR_BAD_VALUE) {
-					//	Log.wtf(TAG, "Failed to read buffer. Error: " + err);
-					//}
 					
-					//Added by akshay
+				
 					ar.read(onset_buf, 0, ONSET_BUFFER_SIZE);
 					
 					for(int i=0;i<onset_buf.length;i++)
@@ -566,8 +471,7 @@ public class ListenActivity extends Activity implements Runnable {
 		});
 		audioRecordThread.start();		
 	}
-	//added by nitin
-	//begin
+	
 	 int searchThreshold(short[]arr,short thr)
 	   {
 	       int peakIndex;
@@ -607,9 +511,7 @@ public class ListenActivity extends Activity implements Runnable {
 
 	       File tempFile = new File(filepath, AUDIO_RECORDER_TEMP_FILE);
 
-	      //Todo:commented for raw
-	      // if(tempFile.exists())
-	      //         tempFile.delete();
+	  
 
 	       return (file.getAbsolutePath() + "/" + AUDIO_RECORDER_TEMP_FILE);
 	   }
@@ -625,9 +527,7 @@ public class ListenActivity extends Activity implements Runnable {
 
 	       File tempFile = new File(filepath, AUDIO_RECORDER_TEMP_OUTPUT_FILE);
 
-	      //Todo:commented for raw
-	      // if(tempFile.exists())
-	      //         tempFile.delete();
+	      
 
 	       return (file.getAbsolutePath() + "/" + AUDIO_RECORDER_TEMP_OUTPUT_FILE);
 	   }
@@ -729,7 +629,7 @@ public class ListenActivity extends Activity implements Runnable {
 	           out.write(header, 0, 44);
 	   }
 
-	 //end Added by Nitin
+	
 	Runnable recordLengthExceeded = new Runnable() {
 		@Override
 		public void run() {
@@ -745,7 +645,7 @@ public class ListenActivity extends Activity implements Runnable {
 			Log.e(TAG, "Interrupted while joining with audio recording thread", e);
 		}
 
-//		pm.stopPlaying();
+
 	}
 
 	public void setupMic() {
@@ -773,8 +673,7 @@ public class ListenActivity extends Activity implements Runnable {
 		try {			
 			ar.stop();
 			
-            //Todo: Commented for raw
-            //deleteTempFile();
+           
 			if(ar.getRecordingState() != AudioRecord.RECORDSTATE_STOPPED) {
 				
 				Log.e(TAG, "failed to stop recording");
@@ -805,14 +704,14 @@ public class ListenActivity extends Activity implements Runnable {
 			progress.show();
 		}
 
-		// Load list of names from website
+		
 		@Override
 		protected Integer doInBackground(Void... v) {
 			int error = computeFreqAndTime();
 			return Integer.valueOf(error);
 		}
 
-		// Finished loading database; remove spinner, enable button, show toast
+		
 		@Override
 		protected void onPostExecute(Integer i) {		
 			progress.dismiss();
@@ -906,12 +805,7 @@ public class ListenActivity extends Activity implements Runnable {
 					if (bis != null) 
 					{ 
 						error = bis.read(buf, 0, 2);
-						//float_buf[l] = (float)buf[0];
-						//Log.d(TAG, "floatvalue0 "+ String.valueOf(float_buf[l]) );
-						//float_buf[l+1] = (float)buf[1];
-						//Log.d(TAG, "floatvalue1 "+ String.valueOf(float_buf[l+1]) );
-						//Added by Akshay - Beat Detect
-						
+										
 					}
 				} 
 				catch (Exception e) 
@@ -941,15 +835,7 @@ public class ListenActivity extends Activity implements Runnable {
 					timeData.add(Double.valueOf((double)data));
 				}
 			}
-   //added by akshay
-			//begin
-			/*BeatDetect bdetect = new BeatDetect();			
-			bdetect.detect(float_buf);
-			
-			if(bdetect.isOnset())
-				Log.e(TAG, "Onset detected");*/
-			//end
-		
+   
 			int j = 0;
 			int k = 0;			
 			while (j < SPECTROGRAM_BUFFER_SIZE) 
@@ -1006,11 +892,7 @@ public class ListenActivity extends Activity implements Runnable {
 			Log.e(TAG, "Failed to close "+MUSIC_DATA_FILE, e);
 		}
 
-		// Display notes
-		// test TODO		
-		//for (int z=0; z<noteFrequency.size(); z++) {
-		//	Log.v(TAG, "Note"+z+" - "+"Freq: "+noteFrequency.get(z).doubleValue()+" Dura: "+noteDuration.get(z).doubleValue()); 
-		//}
+		
 
 		return 0;
 	}
