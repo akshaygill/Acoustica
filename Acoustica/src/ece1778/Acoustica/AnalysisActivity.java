@@ -205,6 +205,10 @@ public class AnalysisActivity extends Activity {
 
 	//Music library Button 
 	public void getFileNames(View view){
+		if(pm != null)
+		{
+			pm.stopPlaying();
+		}
 		Intent filenameIntent = new Intent(this,FileBrowse.class);
 		startActivity(filenameIntent);
 	}
@@ -288,7 +292,10 @@ public class AnalysisActivity extends Activity {
 	/*****************************************************************/
 	@Override
 	public void onBackPressed() {
+		if(pm != null)
+		{
 		pm.stopPlaying();
+		}
 		finish();
 	}
 
