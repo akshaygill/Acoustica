@@ -112,7 +112,7 @@ public class ListenActivity extends Activity implements Runnable {
 	int frequency = 44100; //8000;
 	private static final int RECORDER_BPP = 16;
 	private static final String AUDIO_RECORDER_FILE_EXT_WAV = ".war";
-	private static final String AUDIO_RECORDER_FOLDER = "AudioRecorder";
+	private static final String AUDIO_RECORDER_FOLDER = "Acoustica_Recordings";
 	private static final String AUDIO_RECORDER_TEMP_FILE = "record_temp.raw";
 	private static final String AUDIO_RECORDER_TEMP_OUTPUT_FILE = "record_temp_out.raw";
 	FileOutputStream os = null;

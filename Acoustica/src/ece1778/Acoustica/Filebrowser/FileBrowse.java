@@ -38,7 +38,7 @@ public class FileBrowse  extends Activity{
 		setContentView(R.layout.activity_listview);
 		pm = new PlayMedia(new MediaPlayer());
 		listViewfile=(ListView)findViewById(R.id.listView);
-		directory = Environment.getExternalStorageDirectory().getAbsolutePath()+"/AudioRecorder/";
+		directory = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Acoustica_Recordings/";
 		List<Map<String, String>> musicFilesMap = new ArrayList<Map<String,String>>(); 
 		
         String[] musicFilesArray= wavFileNames(directory);

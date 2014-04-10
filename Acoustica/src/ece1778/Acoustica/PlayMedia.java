@@ -18,7 +18,7 @@ public class PlayMedia {
 	
 	
 	public void startPlaying(String filename){
-		String filePath = Environment.getExternalStorageDirectory()+"/AudioRecorder/"+ filename;
+		String filePath = Environment.getExternalStorageDirectory()+"/Acoustica_Recordings/"+ filename;
 		//MediaPlayer mediaPlayer = new  MediaPlayer();
 		try{
 			if(mp.isPlaying())

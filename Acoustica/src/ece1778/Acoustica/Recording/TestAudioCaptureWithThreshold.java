@@ -31,7 +31,7 @@ public class TestAudioCaptureWithThreshold extends Activity
 	private static final String TAG = TestAudioCaptureWithThreshold.class.getSimpleName();
 	private static final int RECORDER_BPP = 16;
 	private static final String AUDIO_RECORDER_FILE_EXT_WAV = ".wav";
-	private static final String AUDIO_RECORDER_FOLDER = "AudioRecorder";
+	private static final String AUDIO_RECORDER_FOLDER = "Acoustica_Recordings";
 	private static final String AUDIO_RECORDER_TEMP_FILE = "record_temp.raw";
 	private static final String AUDIO_RECORDER_TEMP_OUTPUT_FILE = "record_temp_out.raw";
 	

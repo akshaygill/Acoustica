@@ -77,7 +77,7 @@ public class AnalysisActivity extends Activity {
 	//Added by Akshay
 	//Begin
 	private static final String AUDIO_RECORDER_FILE_EXT_WAV = ".wav";
-	private static final String AUDIO_RECORDER_FOLDER = "AudioRecorder";
+	private static final String AUDIO_RECORDER_FOLDER = "Acoustica_Recordings";
 	private static final String AUDIO_RECORDER_TEMP_FILE = "record_temp.raw";
 	private static final String AUDIO_RECORDER_TEMP_OUTPUT_FILE = "record_temp_out.raw";
 	FileOutputStream os = null;
@@ -184,8 +184,8 @@ public class AnalysisActivity extends Activity {
     String drum_file = "f"+maptoFile(pattern_onSet)+".raw";
     
    // File file1 = new File(path.getPath());
-    File file1 = new File(Environment.getExternalStorageDirectory() + "/AudioRecorder/drum_loops/"+drum_file);
-    File file2 = new File(Environment.getExternalStorageDirectory() + "/AudioRecorder/record_temp.raw");
+    File file1 = new File(Environment.getExternalStorageDirectory() + "/Acoustica_Recordings/drum_loops/"+drum_file);
+    File file2 = new File(Environment.getExternalStorageDirectory() + "/Acoustica_Recordings/record_temp.raw");
     
         stitch.BeginStitch(file1, file2);
         Button b = (Button)findViewById(R.id.saveAnalysisButton);
@@ -224,7 +224,7 @@ public class AnalysisActivity extends Activity {
 		final String state = Environment.getExternalStorageState();
 		Log.d("Path",state);
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
-			String path = Environment.getExternalStorageDirectory().toString()+"/AudioRecorder/drum_loops/";
+			String path = Environment.getExternalStorageDirectory().toString()+"/Acoustica_Recordings/drum_loops/";
 			File f = new File(path);        
 			File files[] = f.listFiles();
 			//File[] files = .listFiles();

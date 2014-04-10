@@ -26,7 +26,7 @@ public class Stitching
 	private static final String TAG = TestAudioCaptureWithThreshold.class.getSimpleName();
 	private static final int RECORDER_BPP = 16;
 	private static final String AUDIO_RECORDER_FILE_EXT_WAV = ".wav";
-	private static final String AUDIO_RECORDER_FOLDER = "AudioRecorder";
+	private static final String AUDIO_RECORDER_FOLDER = "Acoustica_Recordings";
 	private static final String AUDIO_RECORDER_TEMP_OUTPUT_FILE = "record_temp_out.raw";
 	//private static final String AUDIO_RECORDER_WAV_OUTPUT_FILE = "final_out.wav";
 	public String AUDIO_RECORDER_WAV_OUTPUT_FILE = "Record ";
@@ -57,8 +57,8 @@ public class Stitching
 		   
 		   try
 		   {
-			   file1 = new File(Environment.getExternalStorageDirectory() + "/AudioRecorder/record_temp1.raw");
-			   file2 = new File(Environment.getExternalStorageDirectory() + "/AudioRecorder/record_temp2.raw"); 
+			   file1 = new File(Environment.getExternalStorageDirectory() + "/Acoustica_Recordings/record_temp1.raw");
+			   file2 = new File(Environment.getExternalStorageDirectory() + "/Acoustica_Recordings/record_temp2.raw"); 
 		   }
 		   catch (Exception e)
 		   {
